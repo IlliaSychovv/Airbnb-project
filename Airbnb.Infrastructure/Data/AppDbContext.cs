@@ -1,4 +1,4 @@
-using Airbnb.Models;
+using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace Airbnb.Models;
+namespace Airbnb.Domain.Entities; 
 
 public class ApplicationUser : IdentityUser
 {
