@@ -21,6 +21,7 @@ public class AuthService : IAuthService
     public async Task<IdentityResult> RegisterUserAsync(RegisterDto dto)
     {
         var user = dto.Adapt<ApplicationUser>();
+        user.UserName = dto.Email;
 
         return await _userManagerWrapper.CreateAsync(user, dto.Password);
     }

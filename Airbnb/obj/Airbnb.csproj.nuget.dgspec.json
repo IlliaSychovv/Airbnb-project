@@ -53,7 +53,7 @@
             },
             "Mapster": {
               "target": "Package",
-              "version": "[7.4.2-pre02, )"
+              "version": "[7.4.0, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

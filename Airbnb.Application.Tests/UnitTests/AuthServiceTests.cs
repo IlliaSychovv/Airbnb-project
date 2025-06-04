@@ -4,6 +4,7 @@ using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
 using Airbnb.DTOs.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Shouldly;
 using Moq;
 
 namespace Airbnb.Application.Tests;
@@ -11,12 +12,12 @@ namespace Airbnb.Application.Tests;
 public class AuthServiceTests
 {
     [Fact]
-    public async Task RegisterUserAsync_ShouldReturn_SuccessResult_WhenUserIsCreated()
+    public async Task Method_ShouldDoSomething_WhenSomethingHappens()
     {
         var dto = new RegisterDto()
         {
             Email = "test@test.com",
-            Password = "password",
+            Password = "password"
         };
 
         var userManagerMock = new Mock<IUserManagerWrapper>();
@@ -30,7 +31,7 @@ public class AuthServiceTests
         
         var result = await authService.RegisterUserAsync(dto);
         
-        Assert.True(result.Succeeded);
+        result.Succeeded.ShouldBeTrue();
     }
 
     [Fact]
@@ -58,8 +59,8 @@ public class AuthServiceTests
         
         var result = await authService.RegisterUserAsync(dto);
         
-        Assert.False(result.Succeeded);
-        Assert.Contains(result.Errors, e => e.Description == "Unfortunately user is not created");
+        result.Succeeded.ShouldBeFalse(); 
+        result.Errors.ShouldContain(e => e.Description == "Unfortunately user is not created");
     }
 
     [Fact]
@@ -94,6 +95,6 @@ public class AuthServiceTests
         
         var result = await authService.LoginAsync("test@test.com", "password");
         
-        Assert.Equal(expectedToken, result);
+        result.ShouldBe(expectedToken);
     }
 }

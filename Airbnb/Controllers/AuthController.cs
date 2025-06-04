@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Airbnb.Application.DTOs;
-using Airbnb.Application.Services;
 using Airbnb.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Airbnb.Controllers;
 
@@ -41,13 +39,5 @@ public class AuthController : ControllerBase
         }
 
         return Ok(new { Token = token });
-    }
-
-    [Authorize]
-    [HttpGet("logout")]
-    public IActionResult Logout()
-    {
-        Console.WriteLine("Logout method called");
-        return Ok("You are a logged out person!");
     }
 }
