@@ -1,6 +1,6 @@
 # Build results
-bin/
-obj/
+**/bin/
+**/obj/
 
 # Rider and VS Code IDEs
 .idea/
