@@ -15,10 +15,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Airbnb.Application.Interfaces;
- 
+using Airbnb.Domain.DomainInterfaces;
+using Airbnb.Domain.Services;
+using Airbnb.Infrastructure.Repositories;
+using Airbnb.Infrastructure.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 TypeAdapterConfig.GlobalSettings.Scan(typeof(ApplicationUser).Assembly);
+TypeAdapterConfig.GlobalSettings.Scan(typeof(Apartment).Assembly);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -30,12 +35,20 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IApartmentAvailability, ApartmentAvailability>();
+builder.Services.AddScoped<IBookingConflict, BookingConflict>();
+builder.Services.AddScoped<IApartmentService, ApartmentService>();
+builder.Services.AddScoped<BookingService>();
+builder.Services.AddScoped<BookingAppService>();
 
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection("Jwt"));
