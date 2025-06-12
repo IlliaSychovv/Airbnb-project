@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Airbnb.Application.Services;
 using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Airbnb.Controllers;
 
@@ -31,11 +33,18 @@ public class BookingController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
-    [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetUserBookings(Guid userId)
+    
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetClientBookings()
     {
-        var bookings = await _bookingService.GetUserBookingsAsync(userId);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null)
+            return Unauthorized();
+        
+        var userGuid = Guid.Parse(userId);
+        
+        var bookings = await _bookingService.GetUserBookingsAsync(userGuid);
         return Ok(bookings);
     }
 }
