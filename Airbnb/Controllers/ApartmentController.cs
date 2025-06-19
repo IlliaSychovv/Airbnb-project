@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Route("/api/apartment")]
+[Route("api/v1/apartments")]
 public class ApartmentController : ControllerBase
 {
     private readonly IApartmentService _apartmentService;
@@ -15,10 +15,10 @@ public class ApartmentController : ControllerBase
         _apartmentService = apartmentService;
     }
 
-    [HttpPost("create")]
-    public async Task<ActionResult<ApartmentDto>> CreateApartment(ApartmentDto apartmentDto)
+    [HttpPost]
+    public async Task<IActionResult> CreateApartment(CreateApartmentDto apartmentDto)
     {
-        var createdApartment = await _apartmentService.CreateApartmentAsync(apartmentDto);
-        return Ok(createdApartment);
+        await _apartmentService.CreateApartmentAsync(apartmentDto);
+        return NoContent();
     }
 }

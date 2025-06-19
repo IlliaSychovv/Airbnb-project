@@ -5,5 +5,5 @@ namespace Airbnb.Application.Interfaces;
 
 public interface IApartmentService
 {
-    Task<ApartmentDto> CreateApartmentAsync(ApartmentDto dto);
+    Task<ApartmentDto> CreateApartmentAsync(CreateApartmentDto dto);
 }

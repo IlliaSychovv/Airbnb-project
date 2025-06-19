@@ -1,12 +1,9 @@
-namespace Airbnb.Domain.Entities;
+namespace Airbnb.Application.DTOs;
 
-public class Apartment
+public class CreateApartmentDto
 {
-    public Guid Id { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string Location { get; set; }
     public decimal Price { get; set; }
-    
-    public ICollection<Booking> Bookings { get; set; }
 }

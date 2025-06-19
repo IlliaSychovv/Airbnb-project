@@ -5,29 +5,25 @@ using Airbnb.Domain.ValueObject;
 
 namespace Airbnb.Application.Services;
 
-public class BookingAppService
-{
-    private readonly BookingService _bookingService;
+public class BookingAppService : IBookingAppService
+{ 
     private readonly IBookingRepository _bookingRepository;
+    private readonly IBookingService _bookingService;
 
-    public BookingAppService(
-        BookingService bookingService,
-        IBookingRepository bookingRepository)
+    public BookingAppService(IBookingRepository bookingRepository, IBookingService bookingService)
     {
-        _bookingService = bookingService;
-        _bookingRepository = bookingRepository;
-    }
-
-    public async Task<Guid> CreateBookingAsync(Guid userId, Guid apartmentId, DateRange range)
-    {
-        var booking = await _bookingService.CreateBooking(userId, apartmentId, range);
-
-        await _bookingRepository.AddAsync(booking);  
-        return booking.Id;
+         _bookingRepository = bookingRepository;
+         _bookingService = bookingService;
     }
 
     public async Task<List<Booking>> GetUserBookingsAsync(Guid userId)
     {
         return await _bookingRepository.GetByUserIdAsync(userId);
+    }
+
+    public async Task<Guid> CreateBookingAsync(Guid userId, Guid apartmentId, DateRange range)
+    {
+        var booking = await _bookingService.CreateBooking(apartmentId, userId, range);
+        return booking.Id; 
     }
 }

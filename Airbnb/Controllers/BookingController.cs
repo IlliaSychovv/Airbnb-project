@@ -3,35 +3,30 @@ using Microsoft.AspNetCore.Mvc;
 using Airbnb.Application.Services;
 using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
+using Airbnb.Domain.Services;
+using Airbnb.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
-    private readonly BookingAppService _bookingService;
-
+    private readonly IBookingAppService _bookingAppService;
+ 
     public BookingController(BookingAppService bookingService)
     {
-        _bookingService = bookingService;
+        _bookingAppService = bookingService;
     }
 
     [HttpPost("book")]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
         var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
-
-        try
-        {
-            var bookingId = await _bookingService.CreateBookingAsync(dto.ApartmentId, dto.UserId, dataRenge);
-            return Ok(new { Booking = bookingId });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+ 
+        var bookingId = await _bookingAppService.CreateBookingAsync(dto.ApartmentId, dto.UserId, dataRenge);
+        return Ok(new { Booking = bookingId });
     }
     
     [Authorize]
@@ -44,7 +39,7 @@ public class BookingController : ControllerBase
         
         var userGuid = Guid.Parse(userId);
         
-        var bookings = await _bookingService.GetUserBookingsAsync(userGuid);
+        var bookings = await _bookingAppService.GetUserBookingsAsync(userGuid);
         return Ok(bookings);
     }
 }

@@ -15,9 +15,17 @@ public class ApartmentRepository : IApartmentRepository
         _context = context;
     }
 
-    public async Task<List<Apartment>> GetAllAsync()
+    public async Task<List<Apartment>> GetAsync(int pageNumber, int pageSize, string? location = null)
     {
-        return await _context.Apartments.ToListAsync();
+        var query = _context.Apartments.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(location))
+            query = query.Where(a => a.Location.Contains(location));
+        
+        return await query
+            .OrderByDescending(a => a.Id)
+            .Skip(pageSize * pageNumber)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<Apartment> GetByIdAsync(Guid apartmentId)
@@ -28,7 +36,8 @@ public class ApartmentRepository : IApartmentRepository
     public async Task<List<Apartment>> GetAvailableApartmentsAsync(DateRange range)
     {
         return await _context.Apartments
-            .Where(apartment => !_context.Bookings
+            .Include(a => a.Bookings)
+            .Where(apartment => !apartment.Bookings
                 .Any(b => b.ApartmentId == apartment.Id &&
                           b.BookingDate <= range.End &&
                           range.Start <= b.EndBookingDate))

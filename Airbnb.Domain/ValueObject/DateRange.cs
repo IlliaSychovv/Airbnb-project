@@ -10,8 +10,8 @@ public class DateRange
         if (end <= start)
             throw new ArgumentException("Error with time!");
         
-        Start = start;
-        End = end;
+        Start = DateTime.SpecifyKind(start, DateTimeKind.Utc);
+        End = DateTime.SpecifyKind(end, DateTimeKind.Utc);
     }
 
     public bool Intersect(DateRange date)

@@ -2,9 +2,8 @@ using Airbnb.Data;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Airbnb.Data.Repositories;
-using Airbnb.DTOs.Interfaces;
 using Airbnb.Application.Services;
+using Airbnb.DTOs.Interfaces;
 using Airbnb.Application.DTOs;
 using FluentValidation;
 using Airbnb.Application.Validators;
@@ -15,10 +14,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Airbnb.Application.Interfaces;
-using Airbnb.Domain.DomainInterfaces;
-using Airbnb.Domain.Services;
 using Airbnb.Infrastructure.Repositories;
 using Airbnb.Infrastructure.Services;
+using Airbnb.Middlewares;
+using Airbnb.Domain.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,9 +43,10 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddScoped<IApartmentRepository, ApartmentRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-builder.Services.AddScoped<IApartmentAvailability, ApartmentAvailability>();
-builder.Services.AddScoped<IBookingConflict, BookingConflict>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingAppService, BookingAppService>();
+
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<BookingAppService>();
 
@@ -105,7 +105,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
- 
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

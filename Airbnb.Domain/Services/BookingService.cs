@@ -1,28 +1,29 @@
-using Airbnb.Domain.DomainInterfaces;
-using Airbnb.Domain.ValueObject;
+using Airbnb.Application.Interfaces;
 using Airbnb.Domain.Entities;
+using Airbnb.Domain.ValueObject;
 
 namespace Airbnb.Domain.Services;
 
-public class BookingService
+public class BookingService : IBookingService
 {
-    private readonly IApartmentAvailability _apartmentAvailability;
-    private readonly IBookingConflict _bookingConflict;
+    private readonly IBookingRepository _bookingRepository;
 
-    public BookingService(IApartmentAvailability apartmentAvailability, IBookingConflict bookingConflict)
+    public BookingService(IBookingRepository bookingRepository)
     {
-        _apartmentAvailability = apartmentAvailability;
-        _bookingConflict = bookingConflict;
+        _bookingRepository = bookingRepository;
     }
-
+    
     public async Task<Booking> CreateBooking(Guid userId, Guid apartmentId, DateRange range)
     {
-        if (!await _apartmentAvailability.IsAvailableAsync(apartmentId, range))
-            throw new InvalidOperationException("Apartment is not available");
-        
-        if (await _bookingConflict.HasConflictAsync(apartmentId, range))
-            throw new InvalidOperationException("Booking conflict");
-        
-        return Booking.Create(userId, apartmentId, range);
+        bool hasConflict = await _bookingRepository.ExistsConflictAsync(apartmentId, range);
+
+        if (hasConflict)
+            throw new InvalidOperationException("Apartment is not available or booking conflict");
+
+        var booking = Booking.Create(userId, apartmentId, range);
+
+        await _bookingRepository.AddAsync(booking);
+
+        return booking;
     }
 }

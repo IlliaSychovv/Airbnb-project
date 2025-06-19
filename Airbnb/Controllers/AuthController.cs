@@ -5,7 +5,7 @@ using Airbnb.Application.Interfaces;
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/controllers")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -41,6 +41,3 @@ public class AuthController : ControllerBase
         return Ok(new { Token = token });
     }
 }
-/*
- * 
-*/
