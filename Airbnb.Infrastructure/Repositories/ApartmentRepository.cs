@@ -2,6 +2,7 @@ using Airbnb.Application.Interfaces;
 using Airbnb.Data;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
+using Airbnb.Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Airbnb.Infrastructure.Repositories;
@@ -15,7 +16,7 @@ public class ApartmentRepository : IApartmentRepository
         _context = context;
     }
 
-    public async Task<List<Apartment>> GetAsync(int pageNumber, int pageSize, string? location = null)
+    public async Task<IReadOnlyList<Apartment>> GetAsync(int pageNumber, int pageSize, string? location = null)
     {
         var query = _context.Apartments.AsQueryable();
         if (!string.IsNullOrWhiteSpace(location))
@@ -25,9 +26,19 @@ public class ApartmentRepository : IApartmentRepository
             .OrderByDescending(a => a.Id)
             .Skip(pageSize * pageNumber)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(); 
     }
 
+    public async Task<int> GetTotalCountAsync(string? location = null)
+    {
+        var query = _context.Apartments.AsQueryable();
+        
+        if (!string.IsNullOrWhiteSpace(location))
+            query = query.Where(a => a.Location.Contains(location));
+        
+        return await query.CountAsync();
+    }
+    
     public async Task<Apartment> GetByIdAsync(Guid apartmentId)
     {
         return await _context.Apartments.FindAsync(apartmentId);

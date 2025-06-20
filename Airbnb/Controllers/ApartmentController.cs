@@ -1,5 +1,6 @@
 using Airbnb.Application.DTOs;
 using Airbnb.Application.Interfaces;
+using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airbnb.Controllers;
@@ -18,7 +19,16 @@ public class ApartmentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateApartment(CreateApartmentDto apartmentDto)
     {
-        await _apartmentService.CreateApartmentAsync(apartmentDto);
-        return NoContent();
+        var apartment = await _apartmentService.CreateApartmentAsync(apartmentDto);
+        return Created(string.Empty, apartment);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<PagedResponse<Apartment>>> GetAllApartments([FromQuery] int pageNumber = 1 ,
+        [FromQuery] int pageSize = 10,
+        string? location = null)
+    {
+        var pagedResult = await _apartmentService.GetPagedApartmentsAsync(pageNumber, pageSize, location);
+        return Ok(pagedResult);
     }
 }

@@ -47,8 +47,8 @@ builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingAppService, BookingAppService>();
 
-builder.Services.AddScoped<BookingService>();
-builder.Services.AddScoped<BookingAppService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingAppService, BookingAppService>();
 
 builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection("Jwt"));

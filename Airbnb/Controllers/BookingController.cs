@@ -29,7 +29,7 @@ public class BookingController : ControllerBase
         return Ok(new { Booking = bookingId });
     }
     
-    [Authorize]
+    [Authorize(Roles = "Client")]
     [HttpGet]
     public async Task<IActionResult> GetClientBookings()
     {
