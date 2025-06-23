@@ -1,0 +1,42 @@
+using Airbnb.Application.DTOs;
+using Airbnb.Application.Interfaces;
+using Airbnb.Domain.Entities;
+using Airbnb.Domain.Interfaces;
+using Mapster;
+using SequentialGuid;
+
+namespace Airbnb.Application.Services;
+
+public class ApartmentService : IApartmentService
+{ 
+    private readonly IApartmentRepository _apartmentRepository;
+
+    public ApartmentService(IApartmentRepository apartmentRepository)
+    {
+         _apartmentRepository = apartmentRepository;
+    }
+
+    public async Task<ApartmentDto> CreateApartmentAsync(CreateApartmentDto dto)
+    {
+        var apartment = dto.Adapt<Apartment>(); 
+        apartment.Id = SequentialGuidGenerator.Instance.NewGuid();
+        
+        await _apartmentRepository.AddAsync(apartment);
+        
+        return apartment.Adapt<ApartmentDto>();
+    }
+
+    public async Task<PagedResponse<Apartment>> GetPagedApartmentsAsync(int pageNumber, int pageSize,
+        string? location = null)
+    {
+        var item = await _apartmentRepository.GetAsync(pageNumber, pageSize, location);
+        var totalcount = await _apartmentRepository.GetTotalCountAsync(location);
+
+        return new PagedResponse<Apartment>
+        {
+            Items = item.ToList(),
+            TotalCount = totalcount,
+            PageSize = pageSize
+        };
+    }
+}
