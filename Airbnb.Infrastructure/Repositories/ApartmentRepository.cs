@@ -1,8 +1,7 @@
-using Airbnb.Application.Interfaces;
+using Airbnb.Domain.Interfaces;
 using Airbnb.Data;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
-using Airbnb.Application.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Airbnb.Infrastructure.Repositories;
@@ -53,5 +52,11 @@ public class ApartmentRepository : IApartmentRepository
                           b.BookingDate <= range.End &&
                           range.Start <= b.EndBookingDate))
             .ToListAsync();
+    }
+
+    public async Task AddAsync(Apartment apartment)
+    {
+        await _context.Apartments.AddAsync(apartment);
+        await _context.SaveChangesAsync();
     }
 }

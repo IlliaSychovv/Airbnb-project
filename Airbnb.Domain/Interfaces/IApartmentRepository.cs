@@ -1,7 +1,7 @@
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Domain.Interfaces;
 
 public interface IApartmentRepository
 {
@@ -9,4 +9,5 @@ public interface IApartmentRepository
     Task<int> GetTotalCountAsync(string? location = null);
     Task<Apartment> GetByIdAsync(Guid apartmentId);
     Task<List<Apartment>> GetAvailableApartmentsAsync(DateRange range);
+    Task AddAsync(Apartment apartment);
 }

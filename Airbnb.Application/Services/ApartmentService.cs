@@ -1,22 +1,19 @@
 using Airbnb.Application.DTOs;
 using Airbnb.Application.Interfaces;
-using Airbnb.Data;
 using Airbnb.Domain.Entities;
+using Airbnb.Domain.Interfaces;
 using Mapster;
-using MapsterMapper;
 using SequentialGuid;
 
-namespace Airbnb.Infrastructure.Services;
+namespace Airbnb.Application.Services;
 
 public class ApartmentService : IApartmentService
-{
-    private readonly AppDbContext _context;
+{ 
     private readonly IApartmentRepository _apartmentRepository;
 
-    public ApartmentService(AppDbContext context, IApartmentRepository apartmentRepository)
+    public ApartmentService(IApartmentRepository apartmentRepository)
     {
-        _context = context;
-        _apartmentRepository = apartmentRepository;
+         _apartmentRepository = apartmentRepository;
     }
 
     public async Task<ApartmentDto> CreateApartmentAsync(CreateApartmentDto dto)
@@ -24,8 +21,7 @@ public class ApartmentService : IApartmentService
         var apartment = dto.Adapt<Apartment>(); 
         apartment.Id = SequentialGuidGenerator.Instance.NewGuid();
         
-        await _context.Apartments.AddAsync(apartment);
-        await _context.SaveChangesAsync();
+        await _apartmentRepository.AddAsync(apartment);
         
         return apartment.Adapt<ApartmentDto>();
     }
