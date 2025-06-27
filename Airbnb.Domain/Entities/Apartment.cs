@@ -7,6 +7,7 @@ public class Apartment
     public string Description { get; set; }
     public string Location { get; set; }
     public decimal Price { get; set; }
+    public string ExternalId { get; set; }
     
     public ICollection<Booking> Bookings { get; set; }
 }
