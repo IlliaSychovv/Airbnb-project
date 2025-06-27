@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Identity;
 using Shouldly;
 using Moq;
 
-namespace Airbnb.Application.Tests;
+namespace Airbnb.Application.Tests.UnitTests;
 
 public class AuthServiceTests
 {
     [Fact]
-    public async Task Method_ShouldDoSomething_WhenSomethingHappens()
+    public async Task RegisterUserAsync_ShouldReturnSuccessResult_WhenUserIsCreated()
     {
         var dto = new RegisterDto()
         {
