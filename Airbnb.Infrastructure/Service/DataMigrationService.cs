@@ -52,6 +52,7 @@ public class DataMigrationService : IDataMigrationService
         catch (OperationCanceledException)
         {
             _logger.LogWarning("Data migration was canceled");
+            await _context.Database.RollbackTransactionAsync(cancellationToken);
         }
         catch (Exception ex)
         {
@@ -102,26 +103,30 @@ public class DataMigrationService : IDataMigrationService
 
     private async Task ProcessApartmentBatchAsync(List<ExternalApartment> batch, CancellationToken cancellationToken)
     {
-        var externalIds = batch.Select(a => a.ExternalId).ToList();
-
-        var existingIds = await _context.Apartments
-            .Where(a => externalIds.Contains(a.ExternalId))
-            .Select(a => a.ExternalId)
-            .ToListAsync(cancellationToken);
-
-        var newApartments = batch
-            .Where(a => !existingIds.Contains(a.ExternalId))
-            .Select(a => a.Adapt<Apartment>())
-            .ToList();
-
-        if (newApartments.Count == 0)
-        {
-            _logger.LogInformation("Batch skipped, all apartments already exist");
+        if (batch.Count == 0)
             return;
-        }
+        
+        var externalIds = batch.Select(x => x.ExternalId).ToList();
+        
+        var existingApartments = await _context.Apartments
+            .Where(x => externalIds.Contains(x.ExternalId))
+            .ToListAsync(cancellationToken);
+        
+        var existingEntities = existingApartments.ToDictionary(x => x.ExternalId);
 
-        _context.Apartments.AddRange(newApartments);
+        foreach (var externalApartment in batch)
+        {
+            if (existingEntities.TryGetValue(externalApartment.ExternalId, out var entity))
+                externalApartment.Adapt(entity);
+            else
+            {
+                var newApartment = externalApartment.Adapt<Apartment>();
+                _context.Apartments.Add(newApartment);
+            }
+        }
+        
         await _context.SaveChangesAsync(cancellationToken);
+        _logger.LogInformation("Data migration successfully finished");
     }
     
     private async Task ProcessUserBatchAsync(List<ExternalUser> batch, CancellationToken cancellationToken)
@@ -131,24 +136,35 @@ public class DataMigrationService : IDataMigrationService
 
         var externalIds = batch.Select(u => u.ExternalId).ToList();
         
-        var existingUserIds = await _userManager.Users
+        var existingUser = await _userManager.Users
             .Where(u => externalIds.Contains(u.ExternalId))
-            .Select(u => u.ExternalId)
             .ToListAsync(cancellationToken);
 
+        var existingEntities = existingUser.ToDictionary(u => u.ExternalId);
+        
         foreach (var userExternal in batch)
         {
-            if (existingUserIds.Contains(userExternal.ExternalId))
-                continue;
-
-            var newUser = userExternal.Adapt<ApplicationUser>();
-
-            var result = await _userManager.CreateAsync(newUser, DefaultPassword);
-
-            if (!result.Succeeded)
+            if (existingEntities.TryGetValue(userExternal.ExternalId, out var entity))
             {
-                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                _logger.LogError($"Error creating user {newUser.Email}: {errors}");
+                userExternal.Adapt(entity);
+                
+                var updateData = await _userManager.UpdateAsync(entity);
+                if (!updateData.Succeeded)
+                {
+                    var errors = updateData.Errors.Select(e => e.Description);
+                    _logger.LogError($"Error: {errors}");
+                }
+            }
+            else
+            {
+                var newUser = userExternal.Adapt<ApplicationUser>();
+                
+                var createUser = await _userManager.CreateAsync(newUser, DefaultPassword);
+                if (!createUser.Succeeded)
+                {
+                    var errors = createUser.Errors.Select(e => e.Description);
+                    _logger.LogError($"Error: {errors}");
+                }
             }
         }
     }
