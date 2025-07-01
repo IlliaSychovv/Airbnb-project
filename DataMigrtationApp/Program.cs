@@ -1,7 +1,7 @@
 ﻿using Airbnb.Application.Interfaces;
 using Airbnb.Data;
 using Airbnb.Domain.Entities;
-using Airbnb.Infrastructure.Service;
+using Airbnb.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;

@@ -3,13 +3,11 @@ using Airbnb.Application.DTOs.Migrations;
 using Airbnb.Data;
 using Airbnb.Domain.Entities;
 using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
-namespace Airbnb.Infrastructure.Service;
+namespace Airbnb.Infrastructure.Services;
 
 public class DataMigrationService : IDataMigrationService
 {

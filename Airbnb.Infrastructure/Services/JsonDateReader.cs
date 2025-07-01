@@ -2,7 +2,7 @@ using Airbnb.Application.DTOs.Migrations;
 using Airbnb.Application.Interfaces;
 using Newtonsoft.Json;
 
-namespace Airbnb.Infrastructure.Service;
+namespace Airbnb.Infrastructure.Services;
 
 public class JsonDateReader : IJsonDataReader
 {
