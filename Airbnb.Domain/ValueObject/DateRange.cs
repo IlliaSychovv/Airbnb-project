@@ -1,6 +1,6 @@
 namespace Airbnb.Domain.ValueObject;
 
-public class DateRange
+public record DateRange
 {
     public DateTime Start { get; set; }
     public DateTime End { get; set; }

@@ -1,6 +1,6 @@
-namespace Airbnb.Domain.Entities;
+namespace Airbnb.Application.DTOs.Dappers;
 
-public class Apartment
+public record ApartmentUpsertDto
 {
     public Guid Id { get; set; }
     public string Title { get; set; }
@@ -9,6 +9,4 @@ public class Apartment
     public decimal Price { get; set; }
     public string ExternalId { get; set; }
     public string Metadata { get; set; }
-    
-    public ICollection<Booking> Bookings { get; set; }
 }

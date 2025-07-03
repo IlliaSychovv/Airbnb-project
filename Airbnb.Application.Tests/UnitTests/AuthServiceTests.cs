@@ -2,7 +2,6 @@ using Airbnb.Application.DTOs;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
-using Airbnb.DTOs.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
 using Moq;

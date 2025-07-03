@@ -1,8 +1,8 @@
-using Airbnb.Domain.Interfaces;
+using Airbnb.Application.Interfaces;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
 
-namespace Airbnb.Domain.Services;
+namespace Airbnb.Application.Services;
 
 public class BookingService : IBookingService
 {

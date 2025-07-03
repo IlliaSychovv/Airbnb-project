@@ -1,13 +1,13 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Options;
 using Airbnb.Domain.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
-namespace Airbnb.Application.Services;
+namespace Airbnb.Infrastructure.Services;
 
 public class JwtTokenService : IJwtTokenService
 {

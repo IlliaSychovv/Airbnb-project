@@ -1,7 +1,6 @@
 using Airbnb.Application.DTOs;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Airbnb.DTOs.Interfaces;
 using Mapster;
 using Airbnb.Application.Interfaces;
 

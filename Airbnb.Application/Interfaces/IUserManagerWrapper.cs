@@ -1,7 +1,7 @@
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Airbnb.DTOs.Interfaces;
+namespace Airbnb.Application.Interfaces;
 
 public interface IUserManagerWrapper
 {

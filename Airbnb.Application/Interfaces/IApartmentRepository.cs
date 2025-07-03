@@ -1,7 +1,7 @@
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
 
-namespace Airbnb.Domain.Interfaces;
+namespace Airbnb.Application.Interfaces;
 
 public interface IApartmentRepository
 {

@@ -3,8 +3,6 @@ using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Airbnb.Application.Services;
-using Airbnb.DTOs.Interfaces;
-using Airbnb.Application.DTOs;
 using FluentValidation;
 using Airbnb.Application.Validators;
 using FluentValidation.AspNetCore;
@@ -14,11 +12,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Airbnb.Application.Interfaces;
+using Airbnb.Infrastructure.Providers;
 using Airbnb.Infrastructure.Repositories;
-using Airbnb.Domain.Interfaces;
+using Airbnb.Infrastructure.Services;
 using Airbnb.Middlewares;
-using Airbnb.Domain.Services;
 using Microsoft.OpenApi.Models;
+using System.Data;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +46,17 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IApartmentService, ApartmentService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingAppService, BookingAppService>();
+
+builder.Services.AddSingleton<INpgsqlProvider, NpgsqlProvider>();
+
+builder.Services.AddScoped<IDbConnection>(x =>
+{
+    var configuration = x.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
+    return new NpgsqlConnection(connectionString);
+});
+
+builder.Services.AddScoped<IApartmentDapperService, ApartmentDapperService>();
 
 builder.Services.AddScoped<BookingService>();
 builder.Services.AddScoped<BookingAppService>();

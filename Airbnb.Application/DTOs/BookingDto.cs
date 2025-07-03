@@ -1,6 +1,6 @@
 namespace Airbnb.Application.DTOs;
 
-public class BookingDto
+public record BookingDto
 {
     public Guid UserId { get; set; }
     public Guid ApartmentId { get; set; }

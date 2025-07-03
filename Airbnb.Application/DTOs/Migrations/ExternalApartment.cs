@@ -1,6 +1,6 @@
 namespace Airbnb.Application.DTOs.Migrations;
 
-public class ExternalApartment
+public record ExternalApartment
 {
     public string ExternalId { get; set; } 
     public string Title { get; set; }

@@ -12,8 +12,16 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+        
         builder.Entity<Apartment>()
             .HasIndex(i => i.ExternalId);
+        
+        builder.Entity<Apartment>(entity =>
+        {
+            entity.Property(p => p.Metadata)
+                .HasColumnType("jsonb");
+        });
     }
     
     public DbSet<Booking> Bookings { get; set; }

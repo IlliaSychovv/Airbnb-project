@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Airbnb.Application.Services;
 using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
-using Airbnb.Domain.Services;
 using Airbnb.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
