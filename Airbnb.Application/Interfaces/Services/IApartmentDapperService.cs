@@ -1,11 +1,10 @@
 using Airbnb.Application.DTOs.Dappers;
-using Airbnb.Domain.Entities;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Services;
 
 public interface IApartmentDapperService
 {
-    Task UpsertAsync(Apartment apartment);
+    Task UpsertAsync(ApartmentUpsertDto dto);
     Task<IEnumerable<GroupByResultDto>> GetGroupByResultAsync();
     Task<IEnumerable<HavingResultDto>> GetHavingResultsAsync();
     Task<AggregateStatsDto> GetStatisticsAsync();

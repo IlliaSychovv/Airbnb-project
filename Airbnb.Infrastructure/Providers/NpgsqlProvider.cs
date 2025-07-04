@@ -1,4 +1,5 @@
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Providers;
 
 namespace Airbnb.Infrastructure.Providers;
 

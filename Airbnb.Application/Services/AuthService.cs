@@ -3,6 +3,7 @@ using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Mapster;
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Services;
 
 namespace Airbnb.Application.Services;
 
@@ -21,6 +22,7 @@ public class AuthService : IAuthService
     {
         var user = dto.Adapt<ApplicationUser>();
         user.UserName = dto.Email;
+        user.ExternalId = Guid.NewGuid().ToString();
 
         return await _userManagerWrapper.CreateAsync(user, dto.Password);
     }

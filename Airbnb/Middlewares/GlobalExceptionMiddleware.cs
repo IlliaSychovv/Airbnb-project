@@ -20,10 +20,22 @@ public class GlobalExceptionMiddleware
         {
             await _next(context);
         }
+        // catch (Exception ex)
+        // {
+        //     _logger.LogError(ex, "Exception occured");
+        //     await HandleExceptionAsync(context, ex);
+        // }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Exception occured");
-            await HandleExceptionAsync(context, ex);
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(new
+            {
+                status = 500,
+                message = ex.Message,
+                details = ex.InnerException?.Message,
+                stackTrace = ex.StackTrace
+            });
         }
     }
 
@@ -40,7 +52,7 @@ public class GlobalExceptionMiddleware
         else
         {
             status = HttpStatusCode.InternalServerError;
-            message = "Internal Server Error";
+            message = exception.Message;
         }
 
         var response = new { status = (int)status, message };
@@ -52,4 +64,4 @@ public class GlobalExceptionMiddleware
         
         await context.Response.WriteAsync(load);
     }
-}
+} 

@@ -1,7 +1,7 @@
-using Airbnb.Domain.Entities;
 using Airbnb.Application.DTOs;
+using Airbnb.Domain.Entities;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Services;
 
 public interface IApartmentService
 {

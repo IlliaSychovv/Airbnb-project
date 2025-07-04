@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
 using Airbnb.Domain.Entities;
 using Microsoft.Extensions.Options;

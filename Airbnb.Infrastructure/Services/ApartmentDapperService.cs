@@ -1,53 +1,53 @@
-using System.Data;
-using Airbnb.Application.Interfaces;
-using Airbnb.Domain.Entities;
 using Airbnb.Application.DTOs.Dappers;
+using Airbnb.Application.Interfaces.Providers;
+using Airbnb.Application.Interfaces.Services;
 using Dapper;
-using Mapster;
 
 namespace Airbnb.Infrastructure.Services;
 
 public class ApartmentDapperService : IApartmentDapperService
 {
-    private readonly IDbConnection _connection;
+    private readonly IDbConnectionProvider _connectionProvider;
     private readonly INpgsqlProvider _npgsqlProvider;
 
-    public ApartmentDapperService(IDbConnection connection, INpgsqlProvider npgsqlProvider)
+    public ApartmentDapperService(IDbConnectionProvider connectionProvider, INpgsqlProvider npgsqlProvider)
     {
-        _connection = connection;
+        _connectionProvider = connectionProvider;
         _npgsqlProvider = npgsqlProvider;
     }
 
-    public async Task UpsertAsync(Apartment apartment)
+    public async Task UpsertAsync(ApartmentUpsertDto dto)
     {
         var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/Upsert.sql");
-
-        var parameters = apartment.Adapt<ApartmentUpsertDto>();
-        
-        await _connection.ExecuteAsync(sql, parameters);
+        using var connection = _connectionProvider.CreateConnection();
+        await connection.ExecuteAsync(sql, dto);
     }
 
     public async Task<IEnumerable<GroupByResultDto>> GetGroupByResultAsync()
     {
         var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/GroupByResult.sql");
-        return await _connection.QueryAsync<GroupByResultDto>(sql);
+        using var connection = _connectionProvider.CreateConnection();
+        return await connection.QueryAsync<GroupByResultDto>(sql);
     }
 
     public async Task<IEnumerable<HavingResultDto>> GetHavingResultsAsync()
     {
-        var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/HavingResults.sql");
-        return await _connection.QueryAsync<HavingResultDto>(sql);
+        var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/HavingResult.sql");
+        using var connection = _connectionProvider.CreateConnection();
+        return await connection.QueryAsync<HavingResultDto>(sql);
     }
 
     public async Task<AggregateStatsDto> GetStatisticsAsync()
     {
         var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/Statistics.sql");
-        return await _connection.QuerySingleAsync<AggregateStatsDto>(sql);
+        using var connection = _connectionProvider.CreateConnection();
+        return await connection.QuerySingleAsync<AggregateStatsDto>(sql);
     }
 
     public async Task<QuantilesDto> GetPriceQuantilesAsync()
     {
         var sql = _npgsqlProvider.Get("ResourcesSql/Apartment/GetPriceQuantiles.sql");
-        return await _connection.QuerySingleAsync<QuantilesDto>(sql);
+        using var connection = _connectionProvider.CreateConnection();
+        return await connection.QuerySingleAsync<QuantilesDto>(sql);
     }
 }

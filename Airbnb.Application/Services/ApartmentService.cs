@@ -1,5 +1,7 @@
 using Airbnb.Application.DTOs;
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Repositories;
+using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
 using Mapster;
 using SequentialGuid;
@@ -19,6 +21,8 @@ public class ApartmentService : IApartmentService
     {
         var apartment = dto.Adapt<Apartment>(); 
         apartment.Id = SequentialGuidGenerator.Instance.NewGuid();
+        apartment.ExternalId = Guid.NewGuid().ToString();
+        apartment.Metadata = "{}";
         
         await _apartmentRepository.AddAsync(apartment);
         

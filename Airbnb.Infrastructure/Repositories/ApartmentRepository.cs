@@ -1,4 +1,5 @@
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Data;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;

@@ -1,7 +1,7 @@
 using Airbnb.Application.DTOs;
 using Microsoft.AspNetCore.Identity;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Services;
 
 public interface IAuthService
 {

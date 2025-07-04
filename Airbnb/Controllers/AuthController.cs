@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Airbnb.Application.DTOs;
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Services;
 
 namespace Airbnb.Controllers;
 
