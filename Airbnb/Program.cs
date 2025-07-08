@@ -1,4 +1,4 @@
-using Airbnb.Data;
+using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +6,6 @@ using FluentValidation;
 using Airbnb.Application.Validators;
 using FluentValidation.AspNetCore;
 using Mapster;
-using Airbnb;
 using Airbnb.Middlewares;
 using Airbnb.Extensions;
  

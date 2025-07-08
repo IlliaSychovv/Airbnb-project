@@ -1,6 +1,6 @@
 ﻿using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
-using Airbnb.Data;
+using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
 using Airbnb.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;

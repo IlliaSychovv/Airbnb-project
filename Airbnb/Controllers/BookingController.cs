@@ -1,9 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Airbnb.Application.Services;
 using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -15,7 +13,7 @@ public class BookingController : ControllerBase
 {
     private readonly IBookingAppService _bookingAppService;
  
-    public BookingController(BookingAppService bookingService)
+    public BookingController(IBookingAppService bookingService)
     {
         _bookingAppService = bookingService;
     }

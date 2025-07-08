@@ -20,22 +20,10 @@ public class GlobalExceptionMiddleware
         {
             await _next(context);
         }
-        // catch (Exception ex)
-        // {
-        //     _logger.LogError(ex, "Exception occured");
-        //     await HandleExceptionAsync(context, ex);
-        // }
         catch (Exception ex)
         {
-            context.Response.StatusCode = 500;
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsJsonAsync(new
-            {
-                status = 500,
-                message = ex.Message,
-                details = ex.InnerException?.Message,
-                stackTrace = ex.StackTrace
-            });
+            _logger.LogError(ex, "Exception occured");
+            await HandleExceptionAsync(context, ex);
         }
     }
 

@@ -1,5 +1,5 @@
 using Airbnb.Application.DTOs;
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.DTOs.Dappers;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
@@ -33,12 +33,12 @@ public class ApartmentService : IApartmentService
         string? location = null)
     {
         var item = await _apartmentRepository.GetAsync(pageNumber, pageSize, location);
-        var totalcount = await _apartmentRepository.GetTotalCountAsync(location);
+        var totalCount = await _apartmentRepository.GetTotalCountAsync(location);
 
         return new PagedResponse<Apartment>
         {
             Items = item.ToList(),
-            TotalCount = totalcount,
+            TotalCount = totalCount,
             PageSize = pageSize
         };
     }

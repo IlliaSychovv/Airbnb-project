@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Airbnb;
+namespace Airbnb.Extensions;
 
 public static class AuthenticationExtensions
 {

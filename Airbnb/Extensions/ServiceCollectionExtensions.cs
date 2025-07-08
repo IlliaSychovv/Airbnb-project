@@ -6,7 +6,9 @@ using Airbnb.Infrastructure.Services;
 using Airbnb.Application.Interfaces.Providers;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
-namespace Airbnb;
+using Airbnb.Infrastructure.Wrapper;
+
+namespace Airbnb.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -25,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<INpgsqlProvider, NpgsqlProvider>();
         services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
 
+        services.AddScoped<IApartmentDapperRepository, ApartmentDapperRepository>();
         services.AddScoped<IApartmentDapperService, ApartmentDapperService>();
 
         services.AddScoped<BookingService>();

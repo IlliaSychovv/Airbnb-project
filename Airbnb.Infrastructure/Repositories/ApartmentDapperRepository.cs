@@ -1,16 +1,16 @@
 using Airbnb.Application.DTOs.Dappers;
 using Airbnb.Application.Interfaces.Providers;
-using Airbnb.Application.Interfaces.Services;
+using Airbnb.Application.Interfaces.Repositories;
 using Dapper;
 
-namespace Airbnb.Infrastructure.Services;
+namespace Airbnb.Infrastructure.Repositories;
 
-public class ApartmentDapperService : IApartmentDapperService
+public class ApartmentDapperRepository : IApartmentDapperRepository
 {
     private readonly IDbConnectionProvider _connectionProvider;
     private readonly INpgsqlProvider _npgsqlProvider;
 
-    public ApartmentDapperService(IDbConnectionProvider connectionProvider, INpgsqlProvider npgsqlProvider)
+    public ApartmentDapperRepository(IDbConnectionProvider connectionProvider, INpgsqlProvider npgsqlProvider)
     {
         _connectionProvider = connectionProvider;
         _npgsqlProvider = npgsqlProvider;

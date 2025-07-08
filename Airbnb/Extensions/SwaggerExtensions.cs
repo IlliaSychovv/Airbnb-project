@@ -1,6 +1,6 @@
 using Microsoft.OpenApi.Models;
 
-namespace Airbnb;
+namespace Airbnb.Extensions;
 
 public static class SwaggerExtensions
 {

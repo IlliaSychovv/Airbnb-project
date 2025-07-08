@@ -7,34 +7,36 @@ public static class ApartmentQueriesEndpoints
 {
     public static void AddMapApartmentsEndpoints(this WebApplication app)
     {
+        var apartmentsGroup = app.MapGroup("/apartments");
+
+        apartmentsGroup.MapGet("/groupby", async (IApartmentDapperService service) =>
+        {
+            var result = await service.GetGroupByResult();
+            return Results.Ok(result);
+        });
+
+        apartmentsGroup.MapGet("/having", async (IApartmentDapperService service) =>
+        {
+            var result = await service.GetHavingResults();
+            return Results.Ok(result);
+        });
+
+        apartmentsGroup.MapGet("/statistics", async (IApartmentDapperService service) =>
+        {
+            var result = await service.GetStatistics();
+            return Results.Ok(result);
+        });
+
+        apartmentsGroup.MapGet("/pricequantiles", async (IApartmentDapperService service) =>
+        {
+            var result = await service.GetPriceQuantiles();
+            return Results.Ok(result);
+        });
+        
         app.MapPost("apartments/upsert", async (ApartmentUpsertDto dto, IApartmentDapperService service) =>
         {
-            await service.UpsertAsync(dto);
+            await service.Upsert(dto);
             return Results.Ok();
-        });
-
-        app.MapGet("/apartments/groupby", async (IApartmentDapperService service) =>
-        {
-            var result = await service.GetGroupByResultAsync();
-            return Results.Ok(result);
-        });
-
-        app.MapGet("/apartments/having", async (IApartmentDapperService service) =>
-        {
-            var result = await service.GetHavingResultsAsync();
-            return Results.Ok(result);
-        });
-
-        app.MapGet("/apartments/statistics", async (IApartmentDapperService service) =>
-        {
-            var result = await service.GetStatisticsAsync();
-            return Results.Ok(result);
-        });
-
-        app.MapGet("/apartments/pricequantiles", async (IApartmentDapperService service) =>
-        {
-            var result = await service.GetPriceQuantilesAsync();
-            return Results.Ok(result);
         });
     }
 }

@@ -1,5 +1,4 @@
 using Airbnb.Application.DTOs;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
