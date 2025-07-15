@@ -1,3 +1,5 @@
+using Airbnb.Domain.Entities;
+
 namespace Airbnb.Application.DTOs;
 
 public record RegisterDto
@@ -5,4 +7,5 @@ public record RegisterDto
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public string Role { get; set; } = RoleConstants.Client;
 }

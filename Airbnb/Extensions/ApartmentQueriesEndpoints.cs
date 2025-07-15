@@ -5,9 +5,9 @@ namespace Airbnb.Extensions;
 
 public static class ApartmentQueriesEndpoints
 {
-    public static void AddMapApartmentsEndpoints(this WebApplication app)
+    public static void AddMapApartmentsQueriesEndpoints(this WebApplication app)
     {
-        var apartmentsGroup = app.MapGroup("/apartments");
+        var apartmentsGroup = app.MapGroup("/apartment");
 
         apartmentsGroup.MapGet("/groupby", async (IApartmentDapperService service) =>
         {

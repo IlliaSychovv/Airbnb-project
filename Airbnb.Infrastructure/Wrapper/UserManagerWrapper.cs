@@ -37,4 +37,9 @@ public class UserManagerWrapper : IUserManagerWrapper
     {
         return _userManager.GetRolesAsync(user);
     }
+
+    public async Task AddToRoleAsync(ApplicationUser user, string role)
+    {
+        await _userManager.AddToRoleAsync(user, role);
+    }
 }
