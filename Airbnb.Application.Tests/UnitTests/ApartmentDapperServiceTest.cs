@@ -18,7 +18,7 @@ public class ApartmentDapperServiceTest
     }
 
     [Fact]
-    public async Task Upsert_ReturnsData()
+    public async Task Upsert_ShouldReturnsData_WhenWeCallMethod()
     {
         var upsertDto = new ApartmentUpsertDto
         {
@@ -41,7 +41,7 @@ public class ApartmentDapperServiceTest
     }
 
     [Fact]
-    public async Task GetGroupByResult_ReturnsData()
+    public async Task GetGroupByResult_ShouldReturnsData_WhenWeCallMethod()
     {
         var expected = new List<GroupByResultDto>
         {
@@ -61,7 +61,7 @@ public class ApartmentDapperServiceTest
     }
 
     [Fact]
-    public async Task GetHavingResult_ReturnsData()
+    public async Task GetHavingResult_ShouldReturnsData_WhenWeCallMethod()
     {
         var expected = new List<HavingResultDto>
         {
@@ -81,7 +81,7 @@ public class ApartmentDapperServiceTest
     }
 
     [Fact]
-    public async Task GetStatistics_ReturnsData()
+    public async Task GetStatistics_ShouldReturnsData_WhenWeCallMethod()
     {
         var dto = new AggregateStatsDto
         {
@@ -103,7 +103,7 @@ public class ApartmentDapperServiceTest
     }
 
     [Fact]
-    public async Task GetPriceQuantiles_ReturnsData()
+    public async Task GetPriceQuantiles_ShouldReturnsData_WhenWeCallMethod()
     {
         var dto = new QuantilesDto
         {

@@ -33,7 +33,7 @@ public static class ApartmentQueriesEndpoints
             return Results.Ok(result);
         });
         
-        app.MapPost("apartments/upsert", async (ApartmentUpsertDto dto, IApartmentDapperService service) =>
+        apartmentsGroup.MapPost("/upsert", async (ApartmentUpsertDto dto, IApartmentDapperService service) =>
         {
             await service.Upsert(dto);
             return Results.Ok();

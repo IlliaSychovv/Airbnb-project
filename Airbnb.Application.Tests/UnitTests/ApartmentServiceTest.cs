@@ -19,7 +19,7 @@ public class ApartmentServiceTest
     }
 
     [Fact]
-    public async Task CreateApartmentAsync_ResultSuccess()
+    public async Task CreateApartmentAsync_ShouldReturnApartment_WhenWeCreateApartment()
     {
         var apartmentDto = new CreateApartmentDto
         {
@@ -40,7 +40,7 @@ public class ApartmentServiceTest
     }
 
     [Fact]
-    public async Task GetPagedApartmentsAsync_ResultOk()
+    public async Task GetPagedApartmentsAsync_ShouldReturnPagedApartmentsList_WhenWeCallMethod()
     {
         int pageNumber = 1;
         int pageSize = 5;

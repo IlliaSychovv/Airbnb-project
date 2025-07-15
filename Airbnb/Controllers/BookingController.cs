@@ -18,7 +18,7 @@ public class BookingController : ControllerBase
         _bookingAppService = bookingService;
     }
 
-    [HttpPost("book")]
+    [HttpPost]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
         var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
@@ -27,7 +27,7 @@ public class BookingController : ControllerBase
         return Ok(new { Booking = bookingId });
     }
     
-    [Authorize(Roles = "Client")]
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetClientBookings()
     {

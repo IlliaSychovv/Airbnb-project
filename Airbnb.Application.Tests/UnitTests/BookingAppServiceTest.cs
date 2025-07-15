@@ -22,7 +22,7 @@ public class BookingAppServiceTest
     }
 
     [Fact]
-    public async Task GetUserBookingsAsync_ReturnBookings()
+    public async Task GetUserBookingsAsync_ShouldReturnUserBookings_WhenWeCallMethod()
     {
         var userId = Guid.NewGuid();
         var bookings = new List<Booking> { new Booking { Id = Guid.NewGuid() } };
@@ -38,7 +38,7 @@ public class BookingAppServiceTest
     }
 
     [Fact]
-    public async Task CreateBookingAsync_ResultOk()
+    public async Task CreateBookingAsync_ShouldReturnBookingId_WhenWeCreateBooking()
     {
         var userId = Guid.NewGuid();
         var apartmentId = Guid.NewGuid();
