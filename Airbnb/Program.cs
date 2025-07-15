@@ -14,8 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 TypeAdapterConfig.GlobalSettings.Scan(typeof(ApplicationUser).Assembly);
 TypeAdapterConfig.GlobalSettings.Scan(typeof(Apartment).Assembly);
 
-//NpgsqlConnection.GlobalTypeMapper.EnableDynamicJson();
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 

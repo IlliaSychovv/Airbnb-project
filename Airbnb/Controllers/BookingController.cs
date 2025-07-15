@@ -4,6 +4,7 @@ using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
 using Airbnb.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Airbnb.Controllers;
 
@@ -19,6 +20,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
         var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
@@ -27,8 +29,8 @@ public class BookingController : ControllerBase
         return Ok(new { Booking = bookingId });
     }
     
-    [Authorize]
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     public async Task<IActionResult> GetClientBookings()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
