@@ -3,7 +3,6 @@ using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Airbnb.Controllers;
 
@@ -19,15 +18,15 @@ public class ApartmentController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Host")]
+    [Authorize(Roles = "Host")] 
     public async Task<IActionResult> CreateApartment([FromBody] CreateApartmentDto apartmentDto)
     {
         var apartment = await _apartmentService.CreateApartmentAsync(apartmentDto);
         return Created(string.Empty, apartment);
     }
 
-    [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    [HttpGet] 
+    [Authorize(Roles = "Client")]
     public async Task<ActionResult<PagedResponse<Apartment>>> GetAllApartments([FromQuery] int pageNumber = 1 ,
         [FromQuery] int pageSize = 10,
         string? location = null)

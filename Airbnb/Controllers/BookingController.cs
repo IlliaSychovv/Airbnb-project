@@ -4,12 +4,11 @@ using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
 using Airbnb.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+[Authorize(Roles = "Client")]
 [Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
