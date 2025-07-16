@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace Airbnb.Controllers;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
 [Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
@@ -20,7 +21,7 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
         var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
@@ -30,7 +31,7 @@ public class BookingController : ControllerBase
     }
     
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     public async Task<IActionResult> GetClientBookings()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
