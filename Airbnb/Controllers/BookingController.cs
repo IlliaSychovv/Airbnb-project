@@ -21,7 +21,6 @@ public class BookingController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
         var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
@@ -30,8 +29,7 @@ public class BookingController : ControllerBase
         return Ok(new { Booking = bookingId });
     }
     
-    [HttpGet]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Client")]
+    [HttpGet] 
     public async Task<IActionResult> GetClientBookings()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
