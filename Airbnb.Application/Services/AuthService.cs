@@ -23,8 +23,15 @@ public class AuthService : IAuthService
         var user = dto.Adapt<ApplicationUser>();
         user.UserName = dto.Email;
         user.ExternalId = Guid.NewGuid().ToString();
+ 
+        var result = await _userManagerWrapper.CreateAsync(user, dto.Password);
 
-        return await _userManagerWrapper.CreateAsync(user, dto.Password);
+        if (result.Succeeded)
+        {
+            await _userManagerWrapper.AddToRoleAsync(user, dto.Role);
+        }
+        
+        return result;
     }
     
     public async Task<string?> LoginAsync(string username, string password)

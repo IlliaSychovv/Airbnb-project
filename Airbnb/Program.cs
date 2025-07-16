@@ -8,7 +8,7 @@ using FluentValidation.AspNetCore;
 using Mapster;
 using Airbnb.Middlewares;
 using Airbnb.Extensions;
- 
+
 var builder = WebApplication.CreateBuilder(args);
 
 TypeAdapterConfig.GlobalSettings.Scan(typeof(ApplicationUser).Assembly);
@@ -45,7 +45,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.AddMapApartmentsEndpoints();
+app.AddMapApartmentsQueriesEndpoints();
 
 app.MapControllers();
 

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Airbnb.Controllers;
 
 [ApiController]
+[Authorize(Roles = "Client")]
 [Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
@@ -27,8 +28,7 @@ public class BookingController : ControllerBase
         return Ok(new { Booking = bookingId });
     }
     
-    [Authorize]
-    [HttpGet]
+    [HttpGet] 
     public async Task<IActionResult> GetClientBookings()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

@@ -10,4 +10,5 @@ public interface IUserManagerWrapper
     Task<ApplicationUser?> FindByNameAsync(string username);
     Task<bool> CheckPasswordAsync(ApplicationUser user, string password);
     Task<IList<string>> GetRolesAsync(ApplicationUser user);
+    Task AddToRoleAsync(ApplicationUser user, string role);
 }
