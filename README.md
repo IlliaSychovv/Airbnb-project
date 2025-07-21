@@ -108,8 +108,8 @@ For complex analytical queries and aggregations, **Dapper** is used:
 
 ## Contacts
 
-- Author: [Your Name]
-- Email: [your email]
+- Author: Illia Sychov
+- Email: illiasychov@gmail.com
 - Docker Hub: https://hub.docker.com/r/illiasychovv/airbnb-project
 - GitHub: https://github.com/IlliaSychovv/Airbnb-project
 
