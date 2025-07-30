@@ -11,7 +11,7 @@ public class JsonDateReader : IJsonDataReader
     {
         await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
         using var streamReader = new StreamReader(stream);
-        using var jsonReader = new JsonTextReader(streamReader);
+        await using var jsonReader = new JsonTextReader(streamReader);
         
         var serializer = new JsonSerializer();
         while (await jsonReader.ReadAsync(cancellationToken))
