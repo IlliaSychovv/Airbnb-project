@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Airbnb.Application.DTOs;
+using Airbnb.Application.DTOs.Authorization;
 using Airbnb.Application.Interfaces.Services;
 
 namespace Airbnb.Controllers;
@@ -9,12 +9,9 @@ namespace Airbnb.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
-    private readonly IJwtTokenService _jwtTokenService;
-
-    public AuthController(IAuthService authService, IJwtTokenService jwtTokenService)
+    public AuthController(IAuthService authService)
     {
         _authService = authService;
-        _jwtTokenService = jwtTokenService;
     }
 
     [HttpPost("register")]
@@ -39,5 +36,12 @@ public class AuthController : ControllerBase
         }
 
         return Ok(new { Token = token });
+    }
+
+    [HttpPost("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateDto dto, string userId)
+    {
+        await _authService.UpdateUser(dto, userId);
+        return NoContent();
     }
 }
