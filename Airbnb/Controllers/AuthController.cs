@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
         return Ok(new { Token = token });
     }
 
-    [HttpPost("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> Update([FromBody] UpdateDto dto, string userId)
     {
         await _authService.UpdateUser(dto, userId);

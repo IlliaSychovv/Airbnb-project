@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
-using Microsoft.Extensions.Options;
 using Airbnb.Application.CreatedEvent;
 using Mapster;
 
@@ -15,17 +14,15 @@ public class AuthService : IAuthService
 {
     private readonly IUserManagerWrapper _userManagerWrapper;
     private readonly IJwtTokenService _jwtTokenService;
-    private readonly IKafkaProducer _kafkaProducer;
-    private readonly string _topic;
-    
+    private readonly IEventSender _eventSender;
+     
     public AuthService(IUserManagerWrapper userManagerWrapper, IJwtTokenService jwtTokenService, 
-        IKafkaProducer producer, IOptions<KafkaOptions> options)
+        IEventSender eventSender)
     {
         _userManagerWrapper = userManagerWrapper;
         _jwtTokenService = jwtTokenService;
-        _kafkaProducer = producer;
-        _topic = options.Value.Topic;
-    }
+        _eventSender = eventSender;
+     }
 
     public async Task<IdentityResult> RegisterUserAsync(RegisterDto dto)
     {
@@ -42,8 +39,10 @@ public class AuthService : IAuthService
 
             var userEvent = user.Adapt<UserCreatedEvent>();
             
-            var jsonMessage = JsonSerializer.Serialize(userEvent);
-            await _kafkaProducer.ProduceAsync(_topic, jsonMessage);
+            var jsonMessage = userEvent;
+            var key = user.Id.ToString();
+            
+            await _eventSender.SendEvent(KafkaTopics.UserProfileUpdated, key, jsonMessage);
         }
         
         return result;
@@ -78,6 +77,8 @@ public class AuthService : IAuthService
         
         var updatedUser = user.Adapt<UserUpdatedEvent>();        
         var jsonMessage = JsonSerializer.Serialize(updatedUser);
-        await _kafkaProducer.ProduceAsync(_topic, jsonMessage);
+        var key = user.Id.ToString();
+        
+        await _eventSender.SendEvent(KafkaTopics.UserProfileUpdated, key, jsonMessage);
     }
 }

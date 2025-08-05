@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Airbnb.Application\Airbnb.Application.csproj" />
       <ProjectReference Include="..\Airbnb.Domain\Airbnb.Domain.csproj" />
+      <ProjectReference Include="..\Shared.Kafka\Shared.Kafka.csproj" />
     </ItemGroup>
 
     <ItemGroup>

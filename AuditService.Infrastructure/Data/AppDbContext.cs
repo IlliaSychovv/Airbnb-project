@@ -20,6 +20,9 @@ public class AppDbContext : DbContext
             entity.Property(m => m.ProfileJson)
                 .HasColumnType("jsonb");
         });
+
+        modelBuilder.Entity<Audit>()
+            .HasIndex(i => i.CreatedAt);
     }
     
     public DbSet<Audit> Audits { get; set; }

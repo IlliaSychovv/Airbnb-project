@@ -17,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\AuditService.Application\AuditService.Application.csproj" />
       <ProjectReference Include="..\AuditService.Domain\AuditService.Domain.csproj" />
+      <ProjectReference Include="..\Shared.Kafka\Shared.Kafka.csproj" />
     </ItemGroup>
 
 </Project>
