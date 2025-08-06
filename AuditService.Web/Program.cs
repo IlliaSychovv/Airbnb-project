@@ -1,4 +1,4 @@
-using Airbnb.Application.Interfaces;
+using Shared.Kafka.Interfaces;
 using AuditService.Application.DTOs;
 using AuditService.Application.Interfaces;
 using AuditService.Infrastructure.Data;
@@ -16,9 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
-var kafkaOptions = builder.Configuration.GetSection("Kafka").Get<KafkaOptions>();
-Console.WriteLine($"[KafkaOptions] BootstrapServers = {kafkaOptions?.BootstrapServers}, GroupId = {kafkaOptions?.GroupId}, Topic = {kafkaOptions?.Topic}");
-
+ 
 builder.Services.AddDbContext<AppDbContext>(options =>
      options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

@@ -14,10 +14,10 @@ public class AuditRepository : IAuditRepository
         _context = context;
     }
 
-    public async Task<List<Audit>> GetUserChanges(Guid userId, DateTime at)
+    public async Task<List<Audit>> GetUserChanges(Guid userId, DateTime since)
     {
         var list = await _context.Audits
-            .Where(a => a.UserId == userId && a.CreatedAt <= at)
+            .Where(a => a.UserId == userId && a.CreatedAt <= since)
             .OrderByDescending(a => a.CreatedAt)
             .ToListAsync();
 

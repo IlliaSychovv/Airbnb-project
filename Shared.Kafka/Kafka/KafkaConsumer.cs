@@ -1,5 +1,4 @@
-using System.Text.Json;
-using Airbnb.Application.Interfaces;
+using Shared.Kafka.Interfaces;
 using Confluent.Kafka;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,14 +21,13 @@ public class KafkaConsumer<T> : BackgroundService
           _logger = logger;
           _options = options.Value;
      }
-
+     
      protected override Task ExecuteAsync(CancellationToken stoppingToken)
      {
-          Task.Run(() => StartKafka(stoppingToken), stoppingToken);
-          return Task.CompletedTask;
+          return StartKafka(stoppingToken); 
      }
-
-     private void StartKafka(CancellationToken token)
+     
+     private async Task StartKafka(CancellationToken token)
      {
           var config = new ConsumerConfig
           {
@@ -40,18 +38,17 @@ public class KafkaConsumer<T> : BackgroundService
           
           var consumer = new ConsumerBuilder<string, string>(config).Build();
           consumer.Subscribe(_options.Topic);
-
+     
           try
           {
                while (!token.IsCancellationRequested)
                {
                     var result = consumer.Consume(token);
-                    var kafkaMessage = JsonSerializer.Deserialize<T>(result.Message.Value);
- 
+                    
                     using var scope = _serviceProvider.CreateScope();
                     var handler = scope.ServiceProvider.GetRequiredService<IKafkaMessageHandler<T>>();
-                     
-                    handler.HandleMessage(kafkaMessage, token);
+                      
+                    await handler.HandleMessage(result.Message.Value, token);
                }
           }
           catch (OperationCanceledException)

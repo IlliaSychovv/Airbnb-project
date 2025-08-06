@@ -13,6 +13,6 @@ public class EventSender : IEventSender
 
     public async Task SendEvent<T>(string topic, string key, T jsonMessage)
     {
-        await _producer.ProduceAsync(topic, key, jsonMessage);
+        await _producer.ProduceAsync(topic, key, jsonMessage); 
     }
 }

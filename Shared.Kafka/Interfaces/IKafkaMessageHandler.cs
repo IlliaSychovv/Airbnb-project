@@ -1,6 +1,6 @@
-namespace Airbnb.Application.Interfaces;
+namespace Shared.Kafka.Interfaces;
 
 public interface IKafkaMessageHandler<T>
 {
-    Task HandleMessage(T message, CancellationToken cancellationToken);
+    Task HandleMessage(string message, CancellationToken cancellationToken);
 }

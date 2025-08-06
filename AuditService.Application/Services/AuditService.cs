@@ -13,9 +13,9 @@ public class AuditService : IAuditService
         _auditRepository = auditRepository;
     }
 
-    public async Task<IEnumerable<AuditDto>> GetAuditChangesAsync(Guid userId, DateTime at)
+    public async Task<IEnumerable<AuditDto>> GetAuditChangesAsync(Guid userId, DateTime since)
     {
-        var list = await _auditRepository.GetUserChanges(userId, at);
+        var list = await _auditRepository.GetUserChanges(userId, since);
         var auditDto = list.Adapt<List<AuditDto>>();
         return auditDto;
     }
