@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs;
+using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;

@@ -1,6 +1,6 @@
 using System.Security.Claims;
+using Airbnb.Application.DTO;
 using Microsoft.AspNetCore.Mvc;
-using Airbnb.Application.DTOs;
 using Airbnb.Domain.ValueObject;
 using Airbnb.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,7 @@ public class BookingController : ControllerBase
     {
         _bookingAppService = bookingService;
     }
-
+    
     [HttpPost]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {

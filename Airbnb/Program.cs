@@ -1,3 +1,6 @@
+using Airbnb.Application.DTO.Authorization;
+using Airbnb.Application.Interfaces;
+using Airbnb.Application.Options;
 using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +11,8 @@ using FluentValidation.AspNetCore;
 using Mapster;
 using Airbnb.Middlewares;
 using Airbnb.Extensions;
+using Microsoft.Extensions.Options;
+using Shared.Kafka.Kafka;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +23,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateDto>();
 builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.Configure<KafkaOptions>(
+    builder.Configuration.GetSection("Kafka"));
+
+builder.Services.AddSingleton<IKafkaProducer>(provider =>
+{
+    var kafkaOptions = provider.GetRequiredService<IOptions<KafkaOptions>>().Value;
+    var logger = provider.GetRequiredService<ILogger<KafkaProducer>>();
+
+    return new KafkaProducer(kafkaOptions.BootstrapServers, logger);
+});
 
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
