@@ -25,7 +25,7 @@ public class AuthService : IAuthService
     public async Task<IdentityResult> RegisterUserAsync(RegisterDto dto)
     {
         var user = dto.Adapt<ApplicationUser>();
-        user.UserName = dto.Email; // user.UserName = dto.Name
+        user.UserName = dto.Name;
         user.ExternalId = Guid.NewGuid().ToString();
         user.CreatedAt = DateTime.UtcNow;
  
