@@ -1,6 +1,6 @@
 using Airbnb.Domain.Entities;
 
-namespace Airbnb.Application.DTOs.Authorization;
+namespace Airbnb.Application.DTO.Authorization;
 
 public record RegisterDto
 {

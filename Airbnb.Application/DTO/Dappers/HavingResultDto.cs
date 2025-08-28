@@ -1,6 +1,6 @@
-namespace Airbnb.Application.DTOs.Dappers;
+namespace Airbnb.Application.DTO.Dappers;
 
-public record GroupByResultDto
+public record HavingResultDto
 {
     public string Location { get; set; }
     public int ApartmentCount { get; set; }

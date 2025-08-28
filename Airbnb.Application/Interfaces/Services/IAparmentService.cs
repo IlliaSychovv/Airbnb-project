@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs;
+using Airbnb.Application.DTO;
 using Airbnb.Domain.Entities;
 
 namespace Airbnb.Application.Interfaces.Services;

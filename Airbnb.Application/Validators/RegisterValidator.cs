@@ -1,5 +1,4 @@
-using Airbnb.Application.DTOs;
-using Airbnb.Application.DTOs.Authorization;
+using Airbnb.Application.DTO.Authorization;
 using FluentValidation;
 
 namespace Airbnb.Application.Validators;

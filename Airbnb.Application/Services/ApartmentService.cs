@@ -1,5 +1,4 @@
-using Airbnb.Application.DTOs;
-using Airbnb.Application.DTOs.Dappers;
+using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;

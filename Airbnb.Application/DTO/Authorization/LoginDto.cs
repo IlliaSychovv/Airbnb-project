@@ -1,4 +1,4 @@
-namespace Airbnb.Application.DTOs.Authorization;
+namespace Airbnb.Application.DTO.Authorization;
 
 public record LoginDto
 {

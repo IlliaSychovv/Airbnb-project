@@ -1,4 +1,4 @@
-namespace Airbnb.Application.DTOs.Dappers;
+namespace Airbnb.Application.DTO.Dappers;
 
 public record ApartmentUpsertDto
 {

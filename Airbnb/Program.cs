@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Authorization;
+using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Options;
 using Airbnb.Infrastructure.Data;

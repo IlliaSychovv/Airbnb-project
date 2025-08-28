@@ -1,4 +1,4 @@
-namespace Airbnb.Application.DTOs.Migrations;
+namespace Airbnb.Application.DTO.Migrations;
 
 public record ExternalApartment
 {

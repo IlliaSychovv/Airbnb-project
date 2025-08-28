@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Migrations;
+using Airbnb.Application.DTO.Migrations;
 
 namespace Airbnb.Application.Interfaces;
 

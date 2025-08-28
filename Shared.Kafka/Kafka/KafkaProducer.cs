@@ -20,8 +20,13 @@ public class KafkaProducer : IKafkaProducer
     public async Task ProduceAsync<T>(string topic, string key, T data)
     {
         try
-        {
-            var json = JsonSerializer.Serialize(data);
+        { 
+            string json;
+            if (data is string str)
+                json = str;
+            else
+                json = JsonSerializer.Serialize(data);
+            
             var message = new Message<string, string> { Key = key, Value = json };
 
             await _producer.ProduceAsync(topic, message);

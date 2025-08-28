@@ -36,8 +36,8 @@ public class KafkaConsumer<T> : BackgroundService
                AutoOffsetReset = AutoOffsetReset.Earliest
           };
           
-          var consumer = new ConsumerBuilder<string, string>(config).Build();
-          consumer.Subscribe(_options.Topic);
+          var consumer = new ConsumerBuilder<string, string>(config).Build(); 
+          consumer.Subscribe(new[] { KafkaTopics.Users});
      
           try
           {
@@ -53,7 +53,7 @@ public class KafkaConsumer<T> : BackgroundService
           }
           catch (OperationCanceledException)
           {
-               _logger.LogInformation("Kafka consumer stopped");
+               _logger.LogInformation("Kafka consumer canceled");
                consumer.Close();
           }
           catch (Exception ex)

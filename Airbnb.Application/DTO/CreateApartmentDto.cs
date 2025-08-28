@@ -1,4 +1,4 @@
-namespace Airbnb.Application.DTOs;
+namespace Airbnb.Application.DTO;
 
 public record CreateApartmentDto
 {
