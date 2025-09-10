@@ -6,7 +6,9 @@ using Airbnb.Infrastructure.Services;
 using Airbnb.Application.Interfaces.Providers;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
+using Airbnb.Infrastructure.KafkaSender;
 using Airbnb.Infrastructure.Wrapper;
+using Shared.Kafka.Kafka;
 
 namespace Airbnb.Extensions;
 
@@ -26,6 +28,7 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<INpgsqlProvider, NpgsqlProvider>();
         services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
+        services.AddSingleton<IEventSender, EventSender>();
 
         services.AddScoped<IApartmentDapperRepository, ApartmentDapperRepository>();
         services.AddScoped<IApartmentDapperService, ApartmentDapperService>();

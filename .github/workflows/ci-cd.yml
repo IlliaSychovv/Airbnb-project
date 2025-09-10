@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,11 +44,9 @@ jobs:
         with:
           name: coverage-report
           path: ./TestResults/CoverageReport
-  
   docker:
     needs: build-and-test
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

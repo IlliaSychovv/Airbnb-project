@@ -1,5 +1,5 @@
+using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces.Repositories;
-using Airbnb.Application.DTOs;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
 using Moq;

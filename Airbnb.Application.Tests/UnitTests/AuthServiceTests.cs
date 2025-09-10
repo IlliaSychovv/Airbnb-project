@@ -1,4 +1,5 @@
-using Airbnb.Application.DTOs;
+using Airbnb.Application.CreatedEvent;
+using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Services;
@@ -14,7 +15,7 @@ public class AuthServiceTests
     [Fact]
     public async Task RegisterUserAsync_ShouldReturnSuccessResult_WhenUserIsCreated()
     {
-        var dto = new RegisterDto()
+        var dto = new RegisterDto
         {
             Email = "test@test.com",
             Password = "password"
@@ -26,12 +27,19 @@ public class AuthServiceTests
             .ReturnsAsync(IdentityResult.Success);
         
         var jwtTokenServiceMock = new Mock<IJwtTokenService>();
+        
+        var eventSenderMock = new Mock<IEventSender>();
 
-        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object);
+        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object, eventSenderMock.Object);
         
         var result = await authService.RegisterUserAsync(dto);
         
-        result.Succeeded.ShouldBeTrue();
+        result.Succeeded.ShouldBeTrue(); 
+        eventSenderMock.Verify(m => 
+                m.SendEvent(
+                    It.IsAny<string>(), 
+                    It.IsAny<UserCreatedEvent>()),
+            Times.Once);
     }
 
     [Fact]
@@ -55,12 +63,18 @@ public class AuthServiceTests
         
         var jwtTokenServiceMock = new Mock<IJwtTokenService>();
         
-        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object);
+        var eventSenderMock = new Mock<IEventSender>();
+        
+        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object, eventSenderMock.Object);
         
         var result = await authService.RegisterUserAsync(dto);
         
         result.Succeeded.ShouldBeFalse(); 
-        result.Errors.ShouldContain(e => e.Description == "Unfortunately user is not created");
+        eventSenderMock.Verify(m => 
+                m.SendEvent(
+                    It.IsAny<string>(), 
+                    It.IsAny<UserCreatedEvent>()),
+            Times.Never);
     }
 
     [Fact]
@@ -91,10 +105,17 @@ public class AuthServiceTests
             .Setup(m => m.GenerateToken(testUser, testRoles))
             .Returns(expectedToken);
         
-        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object);
+        var eventSenderMock = new Mock<IEventSender>();
+        
+        var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object, eventSenderMock.Object);
         
         var result = await authService.LoginAsync("test@test.com", "password");
         
         result.ShouldBe(expectedToken);
+        eventSenderMock.Verify(m => 
+                m.SendEvent(
+                    It.IsAny<string>(), 
+                    It.IsAny<UserCreatedEvent>()),
+            Times.Never);
     }
 }

@@ -35,4 +35,10 @@
         <ProjectReference Include="..\Airbnb.Domain\Airbnb.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="appsettings.Development.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

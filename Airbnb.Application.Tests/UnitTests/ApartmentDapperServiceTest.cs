@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Dappers;
+using Airbnb.Application.DTO.Dappers;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Services;
 using Moq;

@@ -28,6 +28,16 @@ public class UserManagerWrapper : IUserManagerWrapper
         return _userManager.FindByNameAsync(username);
     }
 
+    public async Task<ApplicationUser?> FindByIdAsync(string userId)
+    {
+        return await _userManager.FindByIdAsync(userId);
+    }
+
+    public async Task<IdentityResult> UpdateAsync(ApplicationUser user)
+    {
+        return await _userManager.UpdateAsync(user);
+    }
+
     public Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
     {
         return _userManager.CheckPasswordAsync(user, password);
