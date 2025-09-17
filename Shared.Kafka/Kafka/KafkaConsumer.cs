@@ -24,7 +24,7 @@ public class KafkaConsumer<T> : BackgroundService
      
      protected override Task ExecuteAsync(CancellationToken stoppingToken)
      {
-          return StartKafka(stoppingToken); 
+          return StartKafka(stoppingToken);
      }
      
      private async Task StartKafka(CancellationToken token)

@@ -1,8 +1,8 @@
 namespace Airbnb.Application.DTO;
 
-public record PagedResponse<Apartment>
+public record PagedResponse<T>
 {
-    public List<Apartment> Items { get; set; } = new();
+    public List<T> Items { get; set; } = new();
     public int CurrentPage { get; set; }
     public int PageSize { get; set; }
     public int TotalCount { get; set; }

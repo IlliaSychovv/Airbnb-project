@@ -18,6 +18,11 @@ public class AuditController : ControllerBase
     public async Task<IActionResult> GetAuditChanges([FromQuery] Guid userId, [FromQuery] DateTime at)
     {
         var list = await _auditService.GetAuditChangesAsync(userId, at);
-        return Ok(list);
+        var localPort = HttpContext.Connection.LocalPort;
+        return Ok(new
+        {
+            port = localPort,
+            list = list,
+        });
     }
 }

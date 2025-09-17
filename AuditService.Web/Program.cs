@@ -4,7 +4,6 @@ using AuditService.Application.Interfaces;
 using AuditService.Infrastructure.Data;
 using AuditService.Infrastructure.Repositories;
 using AuditService.Infrastructure.Services;
-
 using Microsoft.EntityFrameworkCore;
 using Shared.Kafka.Kafka;
 using Shared.Kafka.Options;
@@ -16,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
- 
+
 builder.Services.AddDbContext<AppDbContext>(options =>
      options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 

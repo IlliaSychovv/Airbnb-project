@@ -8,7 +8,7 @@ public static class ApartmentQueriesEndpoints
 {
     public static void AddMapApartmentsQueriesEndpoints(this WebApplication app)
     {
-        var apartmentsGroup = app.MapGroup("/apartment")
+        var apartmentsGroup = app.MapGroup("api/v1/apartment")
             .RequireAuthorization(new AuthorizeAttribute
             { 
                 Roles = "Admin"
