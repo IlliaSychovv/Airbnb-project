@@ -1,7 +1,7 @@
 using System.Text.Json;
-using Airbnb.Application.Interfaces;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
+using Shared.Kafka.Interfaces;
 
 namespace Shared.Kafka.Kafka;
 

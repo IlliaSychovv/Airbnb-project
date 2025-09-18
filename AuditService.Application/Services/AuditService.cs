@@ -1,4 +1,4 @@
-using AuditService.Application.DTOs;
+using AuditService.Application.DTO;
 using AuditService.Application.Interfaces;
 using Mapster;
 

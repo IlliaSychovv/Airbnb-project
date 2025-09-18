@@ -7,6 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Airbnb.Application.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

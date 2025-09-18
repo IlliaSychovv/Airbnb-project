@@ -1,4 +1,4 @@
-namespace AuditService.Application.DTOs;
+namespace AuditService.Application.DTO;
 
 public record AuditDto
 {

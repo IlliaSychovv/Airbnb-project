@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airbnb.Domain", "Airbnb.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airbnb.Infrastructure", "Airbnb.Infrastructure\Airbnb.Infrastructure.csproj", "{C56AE178-B5F2-4467-A3E1-57EECE214827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airbnb.Application.Tests", "Airbnb.Application.Tests\Airbnb.Application.Tests.csproj", "{84E5D823-B258-47F1-82AF-BB47F8489761}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airbnb.Tests", "Airbnb.Tests\Airbnb.Tests.csproj", "{84E5D823-B258-47F1-82AF-BB47F8489761}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigrtationApp", "DataMigrtationApp\DataMigrtationApp.csproj", "{030F0218-A393-4380-ABAD-79AD622824CE}"
 EndProject

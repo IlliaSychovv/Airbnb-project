@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Airbnb.Application.Interfaces;
+using Shared.Kafka.Interfaces;
 
 namespace Airbnb.Infrastructure.KafkaSender;
 

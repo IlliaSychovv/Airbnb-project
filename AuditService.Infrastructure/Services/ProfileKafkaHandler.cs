@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Shared.Kafka.Interfaces;
-using AuditService.Application.DTOs;
+using AuditService.Application.DTO;
 using AuditService.Domain.Entity;
 using AuditService.Infrastructure.Data;
 using Microsoft.Extensions.Logging;

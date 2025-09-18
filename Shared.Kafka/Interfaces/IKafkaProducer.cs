@@ -1,4 +1,4 @@
-namespace Airbnb.Application.Interfaces;
+namespace Shared.Kafka.Interfaces;
 
 public interface IKafkaProducer
 {

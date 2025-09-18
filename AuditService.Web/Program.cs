@@ -1,5 +1,5 @@
 using Shared.Kafka.Interfaces;
-using AuditService.Application.DTOs;
+using AuditService.Application.DTO;
 using AuditService.Application.Interfaces;
 using AuditService.Infrastructure.Data;
 using AuditService.Infrastructure.Repositories;

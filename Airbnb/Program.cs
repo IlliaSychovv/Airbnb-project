@@ -1,5 +1,4 @@
 using Airbnb.Application.DTO.Authorization;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Options;
 using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
@@ -8,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Airbnb.Application.Validators;
 using FluentValidation.AspNetCore;
-using Mapster;
 using Airbnb.Middlewares;
 using Airbnb.Extensions;
 using Microsoft.Extensions.Options;
+using Shared.Kafka.Interfaces;
 using Shared.Kafka.Kafka;
+using Mapster;
 
 var builder = WebApplication.CreateBuilder(args);
 

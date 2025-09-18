@@ -1,4 +1,4 @@
-using AuditService.Application.DTOs;
+using AuditService.Application.DTO;
 
 namespace AuditService.Application.Interfaces;
 
