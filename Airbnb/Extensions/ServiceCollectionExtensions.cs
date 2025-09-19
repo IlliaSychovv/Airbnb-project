@@ -16,25 +16,26 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IJwtTokenService, JwtTokenService>();
-
+        services.AddScoped<IApartmentDapperRepository, ApartmentDapperRepository>();
         services.AddScoped<IApartmentRepository, ApartmentRepository>();
         services.AddScoped<IBookingRepository, BookingRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        
+        services.AddSingleton<IRedisService, RedisService>();
+        services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
+        services.AddScoped<IApartmentDapperService, ApartmentDapperService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IApartmentService, ApartmentService>();
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<IBookingAppService, BookingAppService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<BookingAppService>();
+        services.AddScoped<BookingService>();
         
         services.AddSingleton<INpgsqlProvider, NpgsqlProvider>();
         services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
         services.AddSingleton<IEventSender, EventSender>();
-
-        services.AddScoped<IApartmentDapperRepository, ApartmentDapperRepository>();
-        services.AddScoped<IApartmentDapperService, ApartmentDapperService>();
-
-        services.AddScoped<BookingService>();
-        services.AddScoped<BookingAppService>();
         
         return services;
     }

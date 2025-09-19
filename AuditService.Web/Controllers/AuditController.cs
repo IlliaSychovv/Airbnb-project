@@ -15,14 +15,16 @@ public class AuditController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAuditChanges([FromQuery] Guid userId, [FromQuery] DateTime at)
+    public async Task<IActionResult> GetAuditChanges([FromQuery] Guid userId, [FromQuery] DateTime at, [FromServices] IMonolithClient monolithClient)
     {
         var list = await _auditService.GetAuditChangesAsync(userId, at);
+        var userLogins = await monolithClient.GetUserLoginAsync(userId);
         var localPort = HttpContext.Connection.LocalPort;
         return Ok(new
         {
             port = localPort,
-            list = list,
+            user = userLogins,
+            lists = list,
         });
     }
 }

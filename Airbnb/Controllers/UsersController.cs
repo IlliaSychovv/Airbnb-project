@@ -9,10 +9,12 @@ namespace Airbnb.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly IUserService _userService;
 
-    public UsersController(IAuthService authService)
+    public UsersController(IAuthService authService, IUserService userService)
     {
         _authService = authService;
+        _userService = userService;
     }
     
     [HttpPut]
@@ -20,5 +22,12 @@ public class UsersController : ControllerBase
     {
         await _authService.UpdateUser(dto, userId);
         return NoContent();
+    }
+
+    [HttpGet("logins")]
+    public async Task<IActionResult> GetLogins(Guid userId)
+    {
+        var userLogin = await _userService.GetUserLoginsAsync(userId);
+        return Ok(userLogin);
     }
 }

@@ -26,6 +26,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateDto>();
 builder.Services.AddFluentValidationAutoValidation();
 
+builder.Services.Configure<RedisSettingsOption>(
+    builder.Configuration.GetSection("Redis")
+);
+
 builder.Services.Configure<KafkaOptions>(
     builder.Configuration.GetSection("Kafka"));
 
