@@ -20,7 +20,7 @@ public class UsersController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateDto dto, string userId)
     {
-        await _authService.UpdateUser(dto, userId);
+        await _userService.UpdateUserAsync(dto, userId);
         return NoContent();
     }
 

@@ -58,22 +58,4 @@ public class AuthService : IAuthService
 
         return _jwtTokenService.GenerateToken(user, roles);
     }
-
-    public async Task UpdateUser(UpdateDto dto, string userId)
-    {
-        var user = await _userManagerWrapper.FindByIdAsync(userId);
-        if (user == null)
-            return;
-        
-        user.Email = dto.Email;
-        user.Name = dto.Name;
-        user.PhoneNumber = dto.PhoneNumber;
-        
-        await _userManagerWrapper.UpdateAsync(user);
-        
-        var updatedUser = user.Adapt<UserUpdatedEvent>();  
-        var key = user.Id.ToString();
-        
-        await _eventSender.SendEvent(key, updatedUser);
-    }
 }

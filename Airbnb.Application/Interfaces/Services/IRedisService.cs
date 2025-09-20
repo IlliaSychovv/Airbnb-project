@@ -6,4 +6,5 @@ public interface IRedisService
     Task SetDataAsync(string key, string value, TimeSpan? expiry = null);
     Task<T> GetAsync<T>(string key);
     Task SetAsync<T>(string key, T value, TimeSpan? expiry = null);
+    Task DeleteDataAsync(string key);
 }

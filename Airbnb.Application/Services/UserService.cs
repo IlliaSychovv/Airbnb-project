@@ -1,40 +1,47 @@
+using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Authorization;
+using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Mapster;
-using Microsoft.Extensions.Logging;
 
 namespace Airbnb.Application.Services;
 
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
-    private readonly ILogger<UserService> _logger;
-    private readonly IRedisService _redis;
+    private readonly IUserManagerWrapper _userManagerWrapper;
+    private readonly IEventSender _eventSender;
 
-    public UserService(IUserRepository userRepository, ILogger<UserService> logger, IRedisService redis)
+    public UserService(IUserRepository userRepository, IUserManagerWrapper userManagerWrapper, IEventSender eventSender)
     {
         _userRepository = userRepository;
-        _logger = logger;
-        _redis = redis;
+        _userManagerWrapper = userManagerWrapper;
+        _eventSender = eventSender;
     }
 
-    public async Task<UserLoginsDto?> GetUserLoginsAsync(Guid userId)
+    public async Task<UserProfileDto?> GetUserLoginsAsync(Guid userId)
     {
-        string cashedKey = $"user_{userId}";
-        
-        var cashedUser = await _redis.GetAsync<UserLoginsDto>(cashedKey);
-        if (cashedUser != null)
-        {
-            _logger.LogInformation("Cache hit for user {UserId}", userId);
-            return cashedUser;
-        }
-        
-        _logger.LogInformation("Cache miss for user {UserId}", userId);
-        
         var userLogins = await _userRepository.GetUserLoginsAsync(userId);
-        await _redis.SetAsync(cashedKey, userLogins, TimeSpan.FromMinutes(5));
+        return userLogins;
+    }
+    
+    public async Task UpdateUserAsync(UpdateDto dto, string userId)
+    {
+        var user = await _userManagerWrapper.FindByIdAsync(userId);
+        if (user == null)
+            return;
         
-        return userLogins.Adapt<UserLoginsDto>();
+        user.Email = dto.Email;
+        user.Name = dto.Name;
+        user.PhoneNumber = dto.PhoneNumber;
+        
+        await _userRepository.UpdateUserAsync(user, userId);
+        
+        var updatedUser = user.Adapt<UserUpdatedEvent>();  
+        var key = user.Id.ToString();
+        
+        await _eventSender.SendEvent(key, updatedUser);
     }
 }

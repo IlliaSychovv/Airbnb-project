@@ -1,36 +1,16 @@
-using Shared.Kafka.Interfaces;
-using AuditService.Application.DTO;
-using AuditService.Application.Interfaces;
-using AuditService.Infrastructure.Clients;
-using AuditService.Infrastructure.Data;
-using AuditService.Infrastructure.Repositories;
-using AuditService.Infrastructure.Services;
+using AuditService.Web.Extensions;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using Shared.Kafka.Kafka;
-using Shared.Kafka.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<KafkaOptions>(builder.Configuration.GetSection("Kafka"));
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddHttpClient<IMonolithClient, MonolithClient>(client =>
-{
-    client.BaseAddress = new Uri("http://localhost:5296");
-});
-
-builder.Services.AddScoped<IAuditService, AuditService.Application.Services.AuditService>();
-builder.Services.AddScoped<IAuditRepository, AuditRepository>();
-builder.Services.AddScoped<IKafkaMessageHandler<AuditDto>, ProfileKafkaHandler>();
-
-builder.Services.AddHostedService<KafkaConsumer<AuditDto>>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddServices();
 
 var app = builder.Build();
 

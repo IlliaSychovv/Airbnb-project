@@ -1,8 +1,10 @@
 using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Authorization;
 
 namespace Airbnb.Application.Interfaces.Services;
 
 public interface IUserService
 {
-    Task<UserLoginsDto?> GetUserLoginsAsync(Guid userId);
+    Task<UserProfileDto?> GetUserLoginsAsync(Guid userId);
+    Task UpdateUserAsync(UpdateDto dto, string userId);
 }

@@ -38,4 +38,9 @@ public class RedisService : IRedisService
         var json = JsonSerializer.Serialize(value);
         await SetDataAsync(key, json, expiry);
     }
+
+    public async Task DeleteDataAsync(string key)
+    {
+        await _db.KeyDeleteAsync(key);
+    }
 }

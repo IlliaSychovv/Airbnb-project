@@ -1,5 +1,6 @@
 using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces.Repositories;
+using Airbnb.Domain.Entities;
 using Airbnb.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,15 +15,24 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<UserLoginsDto?> GetUserLoginsAsync(Guid userId)
+    public async Task<UserProfileDto?> GetUserLoginsAsync(Guid userId)
     {
         return await _context.Users
             .Where(u => u.Id == userId)
-            .Select(u => new UserLoginsDto
+            .Select(u => new UserProfileDto
             {
                 Name = u.Name,
-                Email = u.Email
+                Email = u.Email,
+                PhoneNumber = u.PhoneNumber,
+                CreatedAt = u.CreatedAt,
             })
             .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateUserAsync(ApplicationUser user, string userId)
+    { 
+        await _context.Users.FindAsync(userId);
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
     }
 }
