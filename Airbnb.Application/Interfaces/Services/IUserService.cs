@@ -5,6 +5,6 @@ namespace Airbnb.Application.Interfaces.Services;
 
 public interface IUserService
 {
-    Task<UserProfileDto?> GetUserLoginsAsync(Guid userId);
+    Task<UserProfileDto?> GetUserProfileAsync(Guid userId);
     Task UpdateUserAsync(UpdateDto dto, string userId);
 }

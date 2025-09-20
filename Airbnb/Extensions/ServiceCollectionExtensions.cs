@@ -32,8 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<IBookingAppService, BookingAppService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<BookingAppService>();
-        services.AddScoped<BookingService>();
         
         services.Decorate<IUserRepository, CachedUserRepository>();
         

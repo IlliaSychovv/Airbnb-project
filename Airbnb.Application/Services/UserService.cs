@@ -21,10 +21,10 @@ public class UserService : IUserService
         _eventSender = eventSender;
     }
 
-    public async Task<UserProfileDto?> GetUserLoginsAsync(Guid userId)
+    public async Task<UserProfileDto?> GetUserProfileAsync(Guid userId)
     {
-        var userLogins = await _userRepository.GetUserLoginsAsync(userId);
-        return userLogins;
+        var userProfile = await _userRepository.GetUserProfileAsync(userId);
+        return userProfile;
     }
     
     public async Task UpdateUserAsync(UpdateDto dto, string userId)
@@ -33,11 +33,8 @@ public class UserService : IUserService
         if (user == null)
             return;
         
-        user.Email = dto.Email;
-        user.Name = dto.Name;
-        user.PhoneNumber = dto.PhoneNumber;
-        
-        await _userRepository.UpdateUserAsync(user, userId);
+        dto.Adapt(user);
+        await _userRepository.UpdateUserAsync(user);
         
         var updatedUser = user.Adapt<UserUpdatedEvent>();  
         var key = user.Id.ToString();

@@ -24,10 +24,10 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("logins")]
-    public async Task<IActionResult> GetLogins(Guid userId)
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile(Guid userId)
     {
-        var userLogin = await _userService.GetUserLoginsAsync(userId);
-        return Ok(userLogin);
+        var userProfile = await _userService.GetUserProfileAsync(userId);
+        return Ok(userProfile);
     }
 }

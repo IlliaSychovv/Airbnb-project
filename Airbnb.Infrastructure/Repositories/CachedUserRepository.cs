@@ -10,13 +10,14 @@ namespace Airbnb.Infrastructure.Repositories;
 
 public class CachedUserRepository : IUserRepository
 {
+    private const string MonolithPrefix = "Monolith";
     private readonly IUserRepository _repo;
     private readonly IRedisService _redis;
     private readonly IUserManagerWrapper _userManager;
     private readonly ILogger<CachedUserRepository> _logger;
-    private const string MonolithPrefix = "Monolith";
 
-    public CachedUserRepository(IUserRepository repo, IRedisService redis, IUserManagerWrapper userManager, ILogger<CachedUserRepository> logger)
+    public CachedUserRepository(IUserRepository repo, IRedisService redis, 
+        IUserManagerWrapper userManager, ILogger<CachedUserRepository> logger)
     {
         _repo = repo;
         _redis = redis;
@@ -24,7 +25,7 @@ public class CachedUserRepository : IUserRepository
         _logger = logger;
     }
 
-    public async Task<UserProfileDto?> GetUserLoginsAsync(Guid userId)
+    public async Task<UserProfileDto?> GetUserProfileAsync(Guid userId)
     {
         string cashedKey = $"{MonolithPrefix}_user_{userId}";
         
@@ -37,23 +38,25 @@ public class CachedUserRepository : IUserRepository
         
         _logger.LogDebug("Cache miss for user {UserId}", userId);
         
-        var user = await _repo.GetUserLoginsAsync(userId);
+        var user = await _repo.GetUserProfileAsync(userId);
         if (user != null)
             await _redis.SetAsync(cashedKey, user, TimeSpan.FromMinutes(5));
         
         return user;
     }
 
-    public async Task UpdateUserAsync(ApplicationUser entity, string userId)
+    public async Task UpdateUserAsync(ApplicationUser entity)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var user = await _userManager.FindByIdAsync(entity.Id.ToString());
+        if (user == null)
+            return;
         
         entity.Adapt(user);
         await _userManager.UpdateAsync(user);
         
-        string cashedKey = $"{MonolithPrefix}_user_{userId}";
+        string cashedKey = $"{MonolithPrefix}_user_{entity.Id}";
         await _redis.DeleteDataAsync(cashedKey);
         
-        _logger.LogDebug("Cache invalidated for user {UserId}", userId);
+        _logger.LogDebug("Cache invalidated for user {UserId}", entity.Id);
     }
 }

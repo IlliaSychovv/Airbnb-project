@@ -15,7 +15,7 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<UserProfileDto?> GetUserLoginsAsync(Guid userId)
+    public async Task<UserProfileDto?> GetUserProfileAsync(Guid userId)
     {
         return await _context.Users
             .Where(u => u.Id == userId)
@@ -29,9 +29,8 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync();
     }
 
-    public async Task UpdateUserAsync(ApplicationUser user, string userId)
+    public async Task UpdateUserAsync(ApplicationUser user)
     { 
-        await _context.Users.FindAsync(userId);
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
     }

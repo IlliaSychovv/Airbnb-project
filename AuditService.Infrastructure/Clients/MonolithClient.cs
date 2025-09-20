@@ -20,7 +20,7 @@ public class MonolithClient : IMonolithClient
     {
         try
         {
-            var response = await _httpClient.GetAsync($"/api/v1/users/logins?userId={userId}");
+            var response = await _httpClient.GetAsync($"/api/v1/users/profile?userId={userId}");
             if (!response.IsSuccessStatusCode)
                 return null;
 
