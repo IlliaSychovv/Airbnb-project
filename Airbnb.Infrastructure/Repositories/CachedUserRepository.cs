@@ -52,7 +52,7 @@ public class CachedUserRepository : IUserRepository
             return;
         
         entity.Adapt(user);
-        await _userManager.UpdateAsync(user);
+        await _repo.UpdateUserAsync(user);
         
         string cashedKey = $"{MonolithPrefix}_user_{entity.Id}";
         await _redis.DeleteDataAsync(cashedKey);
