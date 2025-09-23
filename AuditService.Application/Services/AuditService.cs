@@ -2,6 +2,7 @@ using AuditService.Application.DTO;
 using AuditService.Application.Interfaces;
 using Mapster;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.Metrics;
 
 namespace AuditService.Application.Services;
 
@@ -10,6 +11,9 @@ public class AuditService : IAuditService
     private readonly IAuditRepository _auditRepository;
     private readonly IMonolithClient _monolithClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private static readonly Meter _meter = new("AuditService.Metrics", "1.0");
+    private static readonly Counter<long> _auditRequestedCounter =
+        _meter.CreateCounter<long>("business_audit_requested_total", description: "Total number of times audits were requested");
 
     public AuditService(IAuditRepository auditRepository, IMonolithClient monolithClient, IHttpContextAccessor httpContextAccessor)
     {
@@ -20,6 +24,8 @@ public class AuditService : IAuditService
 
     public async Task<AuditResponseDto> GetAuditChangesAsync(Guid userId, DateTime since)
     {
+        _auditRequestedCounter.Add(1);
+        
         var list = await _auditRepository.GetUserChanges(userId, since);
         var auditDto = list.Adapt<List<AuditDto>>();
 

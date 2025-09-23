@@ -1,3 +1,4 @@
+using System.Diagnostics.Metrics;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
@@ -7,6 +8,9 @@ namespace Airbnb.Application.Services;
 
 public class BookingService : IBookingService
 {
+    private static readonly Meter _meter = new("BookingService.Metrics", "1.0");
+    private static readonly Counter<long> _bookingsCounter =
+        _meter.CreateCounter<long>("business_bookings_created_total", description: "Total number of bookings created");
     private readonly IBookingRepository _bookingRepository;
 
     public BookingService(IBookingRepository bookingRepository)
@@ -24,6 +28,7 @@ public class BookingService : IBookingService
         var booking = Booking.Create(userId, apartmentId, range);
 
         await _bookingRepository.AddAsync(booking);
+        _bookingsCounter.Add(1);
 
         return booking;
     }
