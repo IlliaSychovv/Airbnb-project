@@ -18,7 +18,7 @@ public class ApartmentController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Roles = "Host")] 
+    //[Authorize(Roles = "Host")] 
     public async Task<IActionResult> CreateApartment([FromBody] CreateApartmentDto apartmentDto)
     {
         var apartment = await _apartmentService.CreateApartmentAsync(apartmentDto);
@@ -26,7 +26,7 @@ public class ApartmentController : ControllerBase
     }
 
     [HttpGet] 
-    [Authorize(Roles = "Client")]
+    //[Authorize(Roles = "Client")]
     public async Task<ActionResult<PagedResponse<Apartment>>> GetAllApartments([FromQuery] int pageNumber = 1 ,
         [FromQuery] int pageSize = 10,
         string? location = null)

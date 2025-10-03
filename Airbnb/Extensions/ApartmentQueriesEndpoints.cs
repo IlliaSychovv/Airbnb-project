@@ -8,11 +8,11 @@ public static class ApartmentQueriesEndpoints
 {
     public static void AddMapApartmentsQueriesEndpoints(this WebApplication app)
     {
-        var apartmentsGroup = app.MapGroup("api/v1/apartment")
-            .RequireAuthorization(new AuthorizeAttribute
-            { 
-                Roles = "Admin"
-            });
+        var apartmentsGroup = app.MapGroup("api/v1/apartment");
+            // .RequireAuthorization(new AuthorizeAttribute
+            // { 
+            //     Roles = "Admin"
+            // });
 
         apartmentsGroup.MapGet("/groupby", async (IApartmentDapperService service) =>
         {

@@ -8,6 +8,11 @@ using FluentValidation.AspNetCore;
 using Airbnb.Middlewares;
 using Airbnb.Extensions;
 using Mapster;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +23,34 @@ builder.Services.AddConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService("BookingService"))
+    .WithMetrics(metrics =>
+    {
+        metrics
+            .AddAspNetCoreInstrumentation()    
+            .AddRuntimeInstrumentation()       
+            .AddProcessInstrumentation()   
+            .AddMeter("ApartmentService.Metrics")
+            .AddMeter("BookingService.Metrics")
+            .AddPrometheusExporter();           
+    });
+
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .Enrich.FromLogContext()
+    .Enrich.WithProperty("Service", "BookingService")
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)  
+    .MinimumLevel.Override("System", LogEventLevel.Information)
+    .WriteTo.Console()
+    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = "bookingservice-logs-{0:yyyy.MM.dd}",
+        InlineFields = true
+    })
+);
 
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateDto>();
@@ -40,13 +73,25 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
+app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.AddMapApartmentsQueriesEndpoints();
+app.UseSerilogRequestLogging(opts =>
+{
+    opts.EnrichDiagnosticContext = (diagContext, httpContext) =>
+    {
+        var userId = httpContext.User?.Identity?.IsAuthenticated == true
+            ? httpContext.User.Identity.Name
+            : "Anonymous";
 
+        diagContext.Set("UserId", userId);
+    };
+});
+
+app.AddMapApartmentsQueriesEndpoints();
 app.MapControllers();
 
 app.Run();

@@ -5,6 +5,7 @@ using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.DTO.Authorization;
 using Mapster;
+using Microsoft.Extensions.Logging;
 
 namespace Airbnb.Application.Services;
 
@@ -13,13 +14,15 @@ public class AuthService : IAuthService
     private readonly IUserManagerWrapper _userManagerWrapper;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IEventSender _eventSender;
+    private readonly ILogger<AuthService> _logger;
      
     public AuthService(IUserManagerWrapper userManagerWrapper, IJwtTokenService jwtTokenService, 
-        IEventSender eventSender)
+        IEventSender eventSender, ILogger<AuthService> logger)
     {
         _userManagerWrapper = userManagerWrapper;
         _jwtTokenService = jwtTokenService;
         _eventSender = eventSender;
+        _logger = logger;
      }
 
     public async Task<IdentityResult> RegisterUserAsync(RegisterDto dto)
@@ -39,6 +42,7 @@ public class AuthService : IAuthService
             var key = user.Id.ToString();
             
             await _eventSender.SendEvent(key, userEvent);
+            _logger.LogInformation("Kafka event sent {@userEvent}", userEvent);
         }
         
         return result;

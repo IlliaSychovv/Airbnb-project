@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Authorize(Roles = "Client")]
+//[Authorize(Roles = "Client")]
 [Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
