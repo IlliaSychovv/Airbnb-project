@@ -48,7 +48,7 @@ public class KafkaConsumer<T> : BackgroundService
                     using var scope = _serviceProvider.CreateScope();
                     var handler = scope.ServiceProvider.GetRequiredService<IKafkaMessageHandler<T>>();
                       
-                    await handler.HandleMessage(result.Message.Value, token);
+                    await handler.HandleMessage(result.Message.Value, result.Message.Key, token);
                }
           }
           catch (OperationCanceledException)

@@ -46,6 +46,8 @@ public static class ServiceCollectionExtensions
 
             return new KafkaProducer(kafkaOptions.BootstrapServers, logger);
         });
+
+        services.AddHostedService<OutboxPublisher>();
         
         return services;
     }

@@ -18,7 +18,7 @@ public class ProfileKafkaHandler : IKafkaMessageHandler<AuditDto>
         _logger = logger;
     }
 
-    public async Task HandleMessage(string message, CancellationToken cancellationToken)
+    public async Task HandleMessage(string message, string key, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Kafka message received: {Message}", message);
         

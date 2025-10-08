@@ -26,4 +26,5 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid
     
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Apartment> Apartments { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
 }
