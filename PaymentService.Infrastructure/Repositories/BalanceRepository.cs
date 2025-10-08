@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PaymentService.Application.Interfaces;
 using PaymentService.Domain.Entity;
 using PaymentService.Infrastructure.Data;
@@ -16,5 +17,14 @@ public class BalanceRepository : IBalanceRepository
     public async Task<Balance?> GetBalanceByUserId(Guid userId)
     {
         return await _context.Balances.FindAsync(userId);
+    }
+
+    public async Task CreateBalance(Balance balance)
+    {
+        if (await _context.Balances.AnyAsync(x => x.UserId == balance.UserId))
+            return;
+        
+        await _context.Balances.AddAsync(balance);
+        await _context.SaveChangesAsync();
     }
 }

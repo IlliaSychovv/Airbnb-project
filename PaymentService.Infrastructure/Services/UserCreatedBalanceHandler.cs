@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PaymentService.Application.Event;
+using PaymentService.Application.Interfaces;
 using PaymentService.Domain.Entity;
 using PaymentService.Infrastructure.Data;
 using Shared.Kafka.Interfaces;
@@ -10,12 +11,12 @@ namespace PaymentService.Infrastructure.Services;
 
 public class UserCreatedBalanceHandler : IKafkaMessageHandler<UserCreatedEvent>
 {
-    private readonly AppDbContext _context;
+    private readonly IBalanceService _balanceService;
     private readonly ILogger<UserCreatedBalanceHandler> _logger;
 
-    public UserCreatedBalanceHandler(AppDbContext context, ILogger<UserCreatedBalanceHandler> logger)
+    public UserCreatedBalanceHandler(IBalanceService balanceService, ILogger<UserCreatedBalanceHandler> logger)
     {
-        _context = context;
+        _balanceService = balanceService;
         _logger = logger;
     }
 
@@ -25,19 +26,7 @@ public class UserCreatedBalanceHandler : IKafkaMessageHandler<UserCreatedEvent>
         if (userEvent == null)
             return;
 
-        if (await _context.Balances.AnyAsync(x => x.UserId == userEvent.Id, cancellationToken))
-            return;
-
-        var balance = new Balance
-        {
-            Id = userEvent.Id,
-            UserId = userEvent.Id,
-            Amount = 0m,
-            CreatedAt = DateTime.UtcNow
-        };
-        
-        await _context.Balances.AddAsync(balance, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _balanceService.CreateBalance(userEvent.Id);
         
         _logger.LogInformation("Balance created for UserId {UserId}", userEvent.Id);
     }

@@ -43,8 +43,6 @@ public class AuthService : IAuthService
 
             await _eventSender.SaveToOutbox(userEvent, key);
             _logger.LogInformation("Send to Outbox event {@userEvent} for user {user.Id}", userEvent, user.Id);
-            // await _eventSender.SendEvent(key, userEvent);
-            // _logger.LogInformation("Kafka event sent {@userEvent}", userEvent);
         }
         
         return result;
