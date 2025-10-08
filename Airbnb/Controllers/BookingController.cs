@@ -29,14 +29,8 @@ public class BookingController : ControllerBase
     }
     
     [HttpGet] 
-    public async Task<IActionResult> GetClientBookings()
+    public async Task<IActionResult> GetClientBookings(Guid userGuid)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
-            return Unauthorized();
-        
-        var userGuid = Guid.Parse(userId);
-        
         var bookings = await _bookingAppService.GetUserBookingsAsync(userGuid);
         return Ok(bookings);
     }

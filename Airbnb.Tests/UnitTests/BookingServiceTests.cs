@@ -1,5 +1,4 @@
 using Airbnb.Application.Interfaces.Repositories;
-using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
@@ -55,6 +54,6 @@ public class BookingServiceTests
         await Should.ThrowAsync<InvalidOperationException>(
             () => _bookingService.CreateBooking(userId, apartmentId, dateRange));
         
-        _bookingRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Booking>()), Times.Never);
+        _bookingRepositoryMock.Verify(x => x.AddAsync(It.IsAny<Booking>()), Times.Once);
     }
 }

@@ -20,13 +20,17 @@ public class BookingService : IBookingService
     
     public async Task<Booking> CreateBooking(Guid userId, Guid apartmentId, DateRange range)
     {
-        bool hasConflict = await _bookingRepository.ExistsConflictAsync(apartmentId, range);
-
-        if (hasConflict)
-            throw new InvalidOperationException("Apartment is not available or booking conflict");
-
         var booking = Booking.Create(userId, apartmentId, range);
-
+        
+        bool hasConflict = await _bookingRepository.ExistsConflictAsync(apartmentId, range);
+        if (hasConflict)
+        {
+            booking.Status = BookingStatus.Cancelled;
+            await _bookingRepository.AddAsync(booking);
+            throw new InvalidOperationException("Apartment is not available");
+        }
+        
+        booking.Status = BookingStatus.Approved;
         await _bookingRepository.AddAsync(booking);
         _bookingsCounter.Add(1);
 
