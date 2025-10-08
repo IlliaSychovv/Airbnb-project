@@ -13,9 +13,4 @@ public record DateRange
         Start = DateTime.SpecifyKind(start, DateTimeKind.Utc);
         End = DateTime.SpecifyKind(end, DateTimeKind.Utc);
     }
-
-    public bool Intersect(DateRange date)
-    {
-        return Start < date.End && End > date.Start;
-    }
 }
