@@ -1,9 +1,8 @@
-using System.Security.Claims;
 using Airbnb.Application.DTO;
+using Airbnb.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Airbnb.Domain.ValueObject;
 using Airbnb.Application.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Airbnb.Controllers;
 
@@ -13,19 +12,26 @@ namespace Airbnb.Controllers;
 public class BookingController : ControllerBase
 {
     private readonly IBookingAppService _bookingAppService;
+    private readonly IBookingSagaOrchestrator _bookingSagaOrchestrator;
  
-    public BookingController(IBookingAppService bookingService)
+    public BookingController(IBookingAppService bookingService, IBookingSagaOrchestrator bookingSagaOrchestrator)
     {
         _bookingAppService = bookingService;
+        _bookingSagaOrchestrator = bookingSagaOrchestrator;
     }
     
     [HttpPost]
     public async Task<IActionResult> CreateBooking([FromBody] BookingDto dto)
     {
-        var dataRenge = new DateRange(dto.StartDate, dto.EndDate);
- 
-        var bookingId = await _bookingAppService.CreateBookingAsync(dto.ApartmentId, dto.UserId, dataRenge);
-        return Ok(new { Booking = bookingId });
+        var bookingId = await _bookingSagaOrchestrator.CreateSagaBooking(
+            dto.ApartmentId, dto.UserId, 
+            new DateRange(dto.StartDate, dto.EndDate), 
+            dto.Amount, dto.AccountNumber);
+        
+        if (bookingId == null)
+            return BadRequest(new { Success = false, Message = "Payment failed and booking cancelled!" });
+
+        return Ok(new { Success = true, BookingId = bookingId });
     }
     
     [HttpGet] 

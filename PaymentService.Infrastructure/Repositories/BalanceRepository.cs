@@ -27,4 +27,26 @@ public class BalanceRepository : IBalanceRepository
         await _context.Balances.AddAsync(balance);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Balance> WithdrawBalanceAsync(Balance balance)
+    {
+        var amount = await _context.Balances.FirstOrDefaultAsync(x => x.AccountNumber == balance.AccountNumber);
+        if(amount.Amount < balance.Amount)
+            throw new InvalidOperationException("Not enough balance");
+        
+        amount.Amount -= balance.Amount;
+        await _context.SaveChangesAsync();
+        
+        return amount;
+    }
+
+    public async Task<Balance> DepositBalanceAsync(Balance balance)
+    {
+        var amount = await _context.Balances.FirstOrDefaultAsync(x => x.AccountNumber == balance.AccountNumber);
+        
+        amount.Amount += balance.Amount;
+        await _context.SaveChangesAsync();
+        
+        return amount;
+    }
 }

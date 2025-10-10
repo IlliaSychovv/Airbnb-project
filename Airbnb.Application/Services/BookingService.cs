@@ -30,10 +30,26 @@ public class BookingService : IBookingService
             throw new InvalidOperationException("Apartment is not available");
         }
         
-        booking.Status = BookingStatus.Approved;
+        booking.Status = BookingStatus.PendingPayment;
         await _bookingRepository.AddAsync(booking);
         _bookingsCounter.Add(1);
 
         return booking;
+    }
+
+    public async Task MarkAsPaid(Guid bookingId)
+    {
+        var booking = await _bookingRepository.GetByIdAsync(bookingId);
+
+        booking.Status = BookingStatus.Approved;
+        await _bookingRepository.UpdateAsync(booking);
+    }
+
+    public async Task MarkAsCancelled(Guid bookingId)
+    {
+        var booking = await _bookingRepository.GetByIdAsync(bookingId);
+        
+        booking.Status = BookingStatus.Cancelled;
+        await _bookingRepository.UpdateAsync(booking);
     }
 }

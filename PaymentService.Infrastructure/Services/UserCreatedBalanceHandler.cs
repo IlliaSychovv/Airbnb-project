@@ -1,10 +1,7 @@
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PaymentService.Application.Event;
 using PaymentService.Application.Interfaces;
-using PaymentService.Domain.Entity;
-using PaymentService.Infrastructure.Data;
 using Shared.Kafka.Interfaces;
 
 namespace PaymentService.Infrastructure.Services;

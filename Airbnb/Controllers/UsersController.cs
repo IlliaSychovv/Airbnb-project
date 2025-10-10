@@ -8,12 +8,10 @@ namespace Airbnb.Controllers;
 [Route("api/v1/users")]
 public class UsersController : ControllerBase
 {
-    private readonly IAuthService _authService;
     private readonly IUserService _userService;
 
-    public UsersController(IAuthService authService, IUserService userService)
+    public UsersController(IUserService userService)
     {
-        _authService = authService;
         _userService = userService;
     }
     

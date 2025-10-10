@@ -4,7 +4,7 @@ using Airbnb.Application.Options;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
-namespace Airbnb.Infrastructure.Services;
+namespace Airbnb.Infrastructure.RedisServices;
 
 public class RedisService : IRedisService
 {
