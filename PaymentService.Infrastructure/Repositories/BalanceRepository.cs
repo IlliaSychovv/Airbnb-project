@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PaymentService.Application.Interfaces;
 using PaymentService.Domain.Entity;
+using PaymentService.Domain.Exceptions;
 using PaymentService.Infrastructure.Data;
 
 namespace PaymentService.Infrastructure.Repositories;
@@ -31,8 +32,8 @@ public class BalanceRepository : IBalanceRepository
     public async Task<Balance> WithdrawBalanceAsync(Balance balance)
     {
         var amount = await _context.Balances.FirstOrDefaultAsync(x => x.AccountNumber == balance.AccountNumber);
-        if(amount.Amount < balance.Amount)
-            throw new InvalidOperationException("Not enough balance");
+        if (amount.Amount < balance.Amount)
+            throw new InsufficientBalanceException();
         
         amount.Amount -= balance.Amount;
         await _context.SaveChangesAsync();

@@ -31,8 +31,6 @@ public class BalanceController : ControllerBase
             return Ok(new { Success = true });
         else
             return BadRequest(new { Success = false, Error = "Insufficient funds" });
-        
-        //return Ok(withdraw);
     }
 
     [HttpPost("transaction/deposit")]

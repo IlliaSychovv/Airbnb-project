@@ -41,6 +41,7 @@ public class BookingRepository : IBookingRepository
         return await _context.Bookings
             .AnyAsync(b =>
                 b.ApartmentId == apartmentId &&
+                b.Status != BookingStatus.Cancelled &&
                 b.BookingDate <= range.End &&
                 range.Start <= b.EndBookingDate);
     }

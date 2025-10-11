@@ -11,12 +11,12 @@ namespace Airbnb.Controllers;
 [Route("api/v1/bookings")]
 public class BookingController : ControllerBase
 {
-    private readonly IBookingAppService _bookingAppService;
+    private readonly IBookingService _bookingService;
     private readonly IBookingSagaOrchestrator _bookingSagaOrchestrator;
  
-    public BookingController(IBookingAppService bookingService, IBookingSagaOrchestrator bookingSagaOrchestrator)
+    public BookingController(IBookingService bookingService, IBookingSagaOrchestrator bookingSagaOrchestrator)
     {
-        _bookingAppService = bookingService;
+        _bookingService = bookingService;
         _bookingSagaOrchestrator = bookingSagaOrchestrator;
     }
     
@@ -29,15 +29,15 @@ public class BookingController : ControllerBase
             dto.Amount, dto.AccountNumber);
         
         if (bookingId == null)
-            return BadRequest(new { Success = false, Message = "Payment failed and booking cancelled!" });
+            return BadRequest(new { Message = "Payment failed and booking cancelled!" });
 
-        return Ok(new { Success = true, BookingId = bookingId });
+        return Ok(new { BookingId = bookingId });
     }
     
     [HttpGet] 
     public async Task<IActionResult> GetClientBookings(Guid userGuid)
     {
-        var bookings = await _bookingAppService.GetUserBookingsAsync(userGuid);
+        var bookings = await _bookingService.GetUserBookingsAsync(userGuid);
         return Ok(bookings);
     }
 }

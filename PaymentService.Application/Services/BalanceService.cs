@@ -1,17 +1,23 @@
 using Mapster;
+using Microsoft.Extensions.Logging;
 using PaymentService.Application.DTO;
 using PaymentService.Application.Interfaces;
 using PaymentService.Domain.Entity;
+using Shared.Redis.Redis;
 
 namespace PaymentService.Application.Services;
 
 public class BalanceService : IBalanceService
 {
     private readonly IBalanceRepository _repository;
+    private readonly IRedisLock _redisLock;
+    private readonly ILogger<BalanceService> _logger;
 
-    public BalanceService(IBalanceRepository repository)
+    public BalanceService(IBalanceRepository repository, IRedisLock redisLock, ILogger<BalanceService> logger)
     {
         _repository = repository;
+        _redisLock = redisLock;
+        _logger = logger;
     }
 
     public async Task<BalanceDto> GetBalanceByUserId(Guid userId)
@@ -43,8 +49,12 @@ public class BalanceService : IBalanceService
 
     public async Task<bool> WithdrawAsync(WithdrawDto dto)
     {
+        var lockKey = $"payment:{dto.AccountNumber}";
+        await using var handle = await _redisLock.LockAsync(lockKey, TimeSpan.FromSeconds(20));
+        
         var entity = dto.Adapt<Balance>();
         await _repository.WithdrawBalanceAsync(entity);
+        
         return true;
     }
 

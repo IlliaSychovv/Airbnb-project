@@ -1,6 +1,6 @@
 using RedLockNet;
 
-namespace Airbnb.Application.Interfaces;
+namespace Shared.Redis.Redis;
 
 public interface IRedisLock
 {

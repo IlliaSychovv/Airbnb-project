@@ -52,4 +52,9 @@ public class BookingService : IBookingService
         booking.Status = BookingStatus.Cancelled;
         await _bookingRepository.UpdateAsync(booking);
     }
+    
+    public async Task<List<Booking>> GetUserBookingsAsync(Guid userId)
+    {
+        return await _bookingRepository.GetByUserIdAsync(userId);
+    }
 }
