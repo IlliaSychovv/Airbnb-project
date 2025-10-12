@@ -44,18 +44,19 @@ public class BalanceService : IBalanceService
     {
         var entity = dto.Adapt<Balance>();
         var deposit = await _repository.DepositBalanceAsync(entity);
+        
         return deposit.Adapt<DepositDto>();
     }
 
-    public async Task<bool> WithdrawAsync(WithdrawDto dto)
+    public async Task<WithdrawDto> WithdrawAsync(WithdrawDto dto)
     {
         var lockKey = $"payment:{dto.AccountNumber}";
         await using var handle = await _redisLock.LockAsync(lockKey, TimeSpan.FromSeconds(20));
         
         var entity = dto.Adapt<Balance>();
-        await _repository.WithdrawBalanceAsync(entity);
+        var withdraw = await _repository.WithdrawBalanceAsync(entity);
         
-        return true;
+        return withdraw.Adapt<WithdrawDto>();
     }
 
     private static string GenerateAccountNumber()

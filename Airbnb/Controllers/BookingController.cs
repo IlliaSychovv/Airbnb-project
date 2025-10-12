@@ -29,7 +29,7 @@ public class BookingController : ControllerBase
             dto.Amount, dto.AccountNumber);
         
         if (bookingId == null)
-            return BadRequest(new { Message = "Payment failed and booking cancelled!" });
+            return BadRequest(new { Message = "Booking failed and cancelled!" });
 
         return Ok(new { BookingId = bookingId });
     }

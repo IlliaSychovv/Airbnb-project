@@ -7,5 +7,5 @@ public interface IBalanceService
     Task<BalanceDto> GetBalanceByUserId(Guid userId);
     Task CreateBalance(Guid userId);
     Task<DepositDto> DepositAsync(DepositDto dto);
-    Task<bool> WithdrawAsync(WithdrawDto dto);
+    Task<WithdrawDto> WithdrawAsync(WithdrawDto dto);
 }

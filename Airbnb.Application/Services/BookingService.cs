@@ -30,7 +30,6 @@ public class BookingService : IBookingService
             throw new InvalidOperationException("Apartment is not available");
         }
         
-        booking.Status = BookingStatus.PendingPayment;
         await _bookingRepository.AddAsync(booking);
         _bookingsCounter.Add(1);
 

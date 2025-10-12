@@ -25,12 +25,8 @@ public class BalanceController : ControllerBase
     [HttpPost("transaction/withdraw")]
     public async Task<IActionResult> WithdrawAsync(WithdrawDto dto)
     {
-        var success = await _balanceService.WithdrawAsync(dto);
-        
-        if (success)
-            return Ok(new { Success = true });
-        else
-            return BadRequest(new { Success = false, Error = "Insufficient funds" });
+        var withdraw = await _balanceService.WithdrawAsync(dto);
+        return Ok(withdraw);
     }
 
     [HttpPost("transaction/deposit")]

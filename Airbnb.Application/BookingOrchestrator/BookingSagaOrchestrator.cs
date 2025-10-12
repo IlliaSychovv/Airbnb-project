@@ -21,29 +21,41 @@ public class BookingSagaOrchestrator : IBookingSagaOrchestrator
         _redisLock = redisLock;
         _journal = journal;
     }
-
+    
     public async Task<Guid?> CreateSagaBooking(Guid apartmentId, Guid userId, DateRange range, decimal price, string accountNumber)
     {
+        Booking booking = null;
+        
         var lockKey = $"booking:{apartmentId}:{range.Start:yyyyMMdd}-{range.End:yyyyMMdd}";
-        await using var handle = await _redisLock.LockAsync(lockKey, TimeSpan.FromSeconds(20));
-        
-        var booking = await _bookingService.CreateBooking(userId, apartmentId, range);
-        await _journal.AddStepAsync(booking.Id, SagaStep.BookingCreated, SagaStepStatus.Completed);
-        await _journal.AddStepAsync(booking.Id, SagaStep.PaymentStarted, SagaStepStatus.InProgress);
-        
-        var transactionSuccess = await _paymentClient.TransactionWithdrawAsync(accountNumber, price);
-        
-        if (transactionSuccess)
+
+        try
         {
-            await _bookingService.MarkAsPaid(booking.Id);
-            await _journal.UpdateStepStatusAsync(booking.Id, SagaStep.PaymentStarted, SagaStepStatus.Completed);
-            return booking.Id;
+            await using var handle = await _redisLock.LockAsync(lockKey);
+        
+            booking = await _bookingService.CreateBooking(userId, apartmentId, range);
+            await _journal.AddSagaAsync(booking.Id, SagaStep.PaymentStarted);
+            
+            var transactionSuccess = await _paymentClient.TransactionWithdrawAsync(accountNumber, price);
+        
+            if (transactionSuccess)
+            {
+                await _bookingService.MarkAsPaid(booking.Id);
+                await _journal.UpdateSagaAsync(booking.Id, SagaStep.BookingCompleted);
+                return booking.Id;
+            }
+            else
+            {
+                await _bookingService.MarkAsCancelled(booking.Id);
+                await _journal.UpdateSagaAsync(booking.Id, SagaStep.PaymentFailed, "Error occurred during withdraw transaction");
+                return null;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await _bookingService.MarkAsCancelled(booking.Id);
-            await _journal.UpdateStepStatusAsync(booking.Id, SagaStep.PaymentStarted, SagaStepStatus.Failed);
-            return null;
+            if (booking != null)
+                await _journal.UpdateSagaAsync(booking.Id, SagaStep.UnexpectedError, ex.Message);
+            
+            throw;
         }
     }
 }
