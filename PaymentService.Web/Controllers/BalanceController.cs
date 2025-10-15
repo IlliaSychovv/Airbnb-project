@@ -1,3 +1,5 @@
+using Contracts.Payment;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using PaymentService.Application.DTO;
 using PaymentService.Application.Interfaces;
@@ -23,8 +25,9 @@ public class BalanceController : ControllerBase
     }
 
     [HttpPost("transaction/withdraw")]
-    public async Task<IActionResult> WithdrawAsync(WithdrawDto dto)
+    public async Task<IActionResult> WithdrawAsync(WithdrawRequest request)
     {
+        var dto = request.Adapt<WithdrawDto>();
         var withdraw = await _balanceService.WithdrawAsync(dto);
         return Ok(withdraw);
     }

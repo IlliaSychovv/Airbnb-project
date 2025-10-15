@@ -54,8 +54,9 @@ public static class ServiceCollectionExtensions
             var multiplexers = new List<RedLockMultiplexer> { new RedLockMultiplexer(muxer) };
             var factory = RedLockFactory.Create(multiplexers);
             var logger = sp.GetRequiredService<ILogger<RedisLock>>();
+            var db = muxer.GetDatabase();
 
-            return new RedisLock(factory, logger);
+            return new RedisLock(factory, logger, db);
         });  
         services.AddSingleton<IKafkaProducer>(provider =>
         {
@@ -65,13 +66,14 @@ public static class ServiceCollectionExtensions
             return new KafkaProducer(kafkaOptions.BootstrapServers, logger);
         });
 
-        services.AddHostedService<OutboxPublisher>();
-
         services.AddHttpClient<IPaymentClient, PaymentClient>(client =>
         {
             var baseUrl = configuration["PaymentMicroserviceApi:BaseUrl"];
             client.BaseAddress = new Uri(baseUrl!);
         });
+        
+        services.AddHostedService<OutboxPublisher>();
+        services.AddHostedService<SagaRecoveryService>();
         
         return services;
     }

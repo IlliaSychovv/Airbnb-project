@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Airbnb.Application.Interfaces;
+using Contracts.Payment;
 using Microsoft.Extensions.Logging;
 
 namespace Airbnb.Infrastructure.Client;
@@ -19,7 +20,7 @@ public class PaymentClient : IPaymentClient
     {
         try
         {
-            var dto = new
+            var dto = new WithdrawRequest
             {
                 AccountNumber = accountNumber,
                 Amount = amount

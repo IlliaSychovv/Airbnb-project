@@ -14,12 +14,14 @@ public class BookingSagaJournalRepository : IBookingSagaJournalRepository
         _context = context;
     }
     
-    public async Task AddSagaAsync(Guid bookingId, SagaStep step)
+    public async Task AddSagaAsync(Guid bookingId, SagaStep step, string accountNumber, decimal amount)
     {
         var journal = new BookingSagaJournal
         {
             BookingId = bookingId,
             Step = step,
+            AccountNumber = accountNumber,
+            Amount = amount,
             CreatedAt = DateTime.UtcNow
         };
         
@@ -35,5 +37,12 @@ public class BookingSagaJournalRepository : IBookingSagaJournalRepository
         journal.Step = step;
         journal.Error = error;
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<BookingSagaJournal>> GetStuckSagasAsync()
+    {
+        return await _context.BookingSagaJournals
+            .Where(x => x.Step == SagaStep.PaymentStarted)
+            .ToListAsync();
     }
 }
