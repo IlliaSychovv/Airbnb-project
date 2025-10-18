@@ -1,5 +1,4 @@
 using Mapster;
-using Microsoft.Extensions.Logging;
 using PaymentService.Application.DTO;
 using PaymentService.Application.Interfaces;
 using PaymentService.Domain.Entity;
@@ -11,13 +10,11 @@ public class BalanceService : IBalanceService
 {
     private readonly IBalanceRepository _repository;
     private readonly IRedisLock _redisLock;
-    private readonly ILogger<BalanceService> _logger;
-
-    public BalanceService(IBalanceRepository repository, IRedisLock redisLock, ILogger<BalanceService> logger)
+    
+    public BalanceService(IBalanceRepository repository, IRedisLock redisLock)
     {
         _repository = repository;
         _redisLock = redisLock;
-        _logger = logger;
     }
 
     public async Task<BalanceDto> GetBalanceByUserId(Guid userId)

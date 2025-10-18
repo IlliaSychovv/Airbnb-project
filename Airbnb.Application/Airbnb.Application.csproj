@@ -12,6 +12,7 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
         <PackageReference Include="RedLock.net" Version="2.3.2" />
         <PackageReference Include="SequentialGuid" Version="4.0.6" />
+        <PackageReference Include="StackExchange.Redis" Version="2.9.32" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.11.0" />
     </ItemGroup>

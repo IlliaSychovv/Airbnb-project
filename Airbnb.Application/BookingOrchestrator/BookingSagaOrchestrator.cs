@@ -1,26 +1,27 @@
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Providers;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.ValueObject;
 using Microsoft.Extensions.Logging;
-using Shared.Redis.Redis;
 
 namespace Airbnb.Application.BookingOrchestrator;
 
 public class BookingSagaOrchestrator : IBookingSagaOrchestrator
 {
+    private readonly IBookingDateRangeLockProvider _bookingDateRangeLockProvider;
     private readonly ILogger<BookingSagaOrchestrator> _logger;
     private readonly IBookingSagaJournalRepository _journal;
     private readonly IBookingService _bookingService;
     private readonly IPaymentClient _paymentClient;
-    private readonly IRedisLock _redisLock;
 
     public BookingSagaOrchestrator(IBookingService bookingService, IPaymentClient paymentClient,
-        IRedisLock redisLock, IBookingSagaJournalRepository journal, ILogger<BookingSagaOrchestrator> logger)
+        IBookingSagaJournalRepository journal, ILogger<BookingSagaOrchestrator> logger,
+        IBookingDateRangeLockProvider bookingDateRangeLockProvider)
     {
+        _bookingDateRangeLockProvider = bookingDateRangeLockProvider;
         _bookingService = bookingService;
         _paymentClient = paymentClient;
-        _redisLock = redisLock;
         _journal = journal;
         _logger = logger;
     }
@@ -29,7 +30,7 @@ public class BookingSagaOrchestrator : IBookingSagaOrchestrator
     {
         Booking booking = null;
         
-        await _redisLock.LockDateRangeForBooking(apartmentId, range.Start, range.End);
+        await _bookingDateRangeLockProvider.LockDateRangeForBooking(apartmentId, range.Start, range.End);
 
         try
         {
@@ -37,7 +38,7 @@ public class BookingSagaOrchestrator : IBookingSagaOrchestrator
             await _journal.AddSagaAsync(booking.Id, SagaStep.PaymentStarted, accountNumber, price);
             
             var transactionSuccess = await _paymentClient.TransactionWithdrawAsync(accountNumber, price);
-        
+            
             if (transactionSuccess)
             {
                 await _bookingService.MarkAsPaid(booking.Id);

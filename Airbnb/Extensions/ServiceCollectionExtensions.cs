@@ -8,6 +8,7 @@ using Airbnb.Application.Interfaces.Providers;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
+using Airbnb.Application.Providers;
 using Airbnb.Infrastructure.Client;
 using Airbnb.Infrastructure.KafkaSender;
 using Airbnb.Infrastructure.RedisServices;
@@ -31,6 +32,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBookingRepository, BookingRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         
+        var redisOptions = configuration.GetSection("Redis").Get<RedisSettingsOption>();
+        var muxer = ConnectionMultiplexer.Connect(redisOptions.ConnectionString);
+        services.AddSingleton<IConnectionMultiplexer>(muxer);
+
+        services.AddSingleton<IDatabase>(sp => sp.GetRequiredService<IConnectionMultiplexer>().GetDatabase());
+        
+        services.AddScoped<IBookingDateRangeLockProvider, BookingDateRangeLockProvider>();
         services.AddScoped<IBookingSagaOrchestrator, BookingSagaOrchestrator>();
         services.AddScoped<IBookingSagaJournalRepository, BookingSagaJournalRepository>();
         services.AddScoped<IUserManagerWrapper, UserManagerWrapper>();
@@ -54,9 +62,8 @@ public static class ServiceCollectionExtensions
             var multiplexers = new List<RedLockMultiplexer> { new RedLockMultiplexer(muxer) };
             var factory = RedLockFactory.Create(multiplexers);
             var logger = sp.GetRequiredService<ILogger<RedisLock>>();
-            var db = muxer.GetDatabase();
 
-            return new RedisLock(factory, logger, db);
+            return new RedisLock(factory, logger);
         });  
         services.AddSingleton<IKafkaProducer>(provider =>
         {

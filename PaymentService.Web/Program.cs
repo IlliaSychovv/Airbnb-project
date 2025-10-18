@@ -35,9 +35,8 @@ builder.Services.AddSingleton<IRedisLock>(sp =>
     var multiplexers = new List<RedLockMultiplexer> { new RedLockMultiplexer(muxer) };
     var factory = RedLockFactory.Create(multiplexers);
     var logger = sp.GetRequiredService<ILogger<RedisLock>>();
-    var db = muxer.GetDatabase();
 
-    return new RedisLock(factory, logger, db);
+    return new RedisLock(factory, logger);
 });
 
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
