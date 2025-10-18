@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Migrations;
+using Airbnb.Application.DTO.Migrations;
 using Airbnb.Application.Interfaces;
 using Newtonsoft.Json;
 

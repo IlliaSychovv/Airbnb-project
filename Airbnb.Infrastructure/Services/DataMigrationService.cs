@@ -1,5 +1,5 @@
+using Airbnb.Application.DTO.Migrations;
 using Airbnb.Application.Interfaces;
-using Airbnb.Application.DTOs.Migrations;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
@@ -16,7 +16,7 @@ public class DataMigrationService : IDataMigrationService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<DataMigrationService> _logger; 
     private readonly IJsonDataReader _jsonReader;
-    private const string DefaultPassword = "default12345";
+    private const string DefaultPassword = "Default12345!";
 
     public DataMigrationService(AppDbContext context,
         UserManager<ApplicationUser> userManager,
@@ -157,12 +157,13 @@ public class DataMigrationService : IDataMigrationService
             else
             {
                 var newUser = userExternal.Adapt<ApplicationUser>();
-                
+                newUser.UserName = newUser.Name;
+                newUser.Role = "Client";
                 var createUser = await _userManager.CreateAsync(newUser, DefaultPassword);
                 if (!createUser.Succeeded)
                 {
-                    var errors = createUser.Errors.Select(e => e.Description);
-                    _logger.LogError($"Error: {errors}");
+                    var errors = string.Join(", ", createUser.Errors.Select(e => e.Description));
+                    _logger.LogError("Error while creating user {ExternalId}: {Errors}", newUser.ExternalId, errors);
                 }
             }
         }

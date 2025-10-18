@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Dappers;
+using Airbnb.Application.DTO.Dappers;
 
 namespace Airbnb.Application.Interfaces.Services;
 

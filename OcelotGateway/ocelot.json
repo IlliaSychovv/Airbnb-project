@@ -1,0 +1,29 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/microservice/{everything}",
+      "DownstreamPathTemplate": "/api/v1/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5079 },
+        { "Host": "localhost", "Port": 5080 }
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ]
+    },
+    {
+      "UpstreamPathTemplate": "/monolith/{everything}",
+      "DownstreamPathTemplate": "/api/v1/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        { "Host": "localhost", "Port": 5296 }
+      ],
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "PATCH", "DELETE" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5124"
+  }
+}

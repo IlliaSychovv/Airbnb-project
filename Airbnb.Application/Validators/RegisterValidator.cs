@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs;
+using Airbnb.Application.DTO.Authorization;
 using FluentValidation;
 
 namespace Airbnb.Application.Validators;
@@ -20,5 +20,10 @@ public class RegisterValidator : AbstractValidator<RegisterDto>
             .MinimumLength(8).WithMessage("Password must be at least 8 character long")
             .Matches(@"[\!\@\#\$\%\^\&\*]").WithMessage("Password must contain at least one special character")
             .Matches(@"[A-Z]+").WithMessage("Password must contain at least one upper case letter");
+        
+        RuleFor(x => x.PhoneNumber)
+            .NotEmpty()
+            .Matches(@"^\+\d{10,15}$")
+            .WithMessage("The phone number must start with '+' and contain 10 to 15 digits");
     }
 }

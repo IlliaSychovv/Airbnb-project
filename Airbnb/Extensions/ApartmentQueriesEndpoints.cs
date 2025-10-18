@@ -1,4 +1,4 @@
-using Airbnb.Application.DTOs.Dappers;
+using Airbnb.Application.DTO.Dappers;
 using Airbnb.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -8,11 +8,11 @@ public static class ApartmentQueriesEndpoints
 {
     public static void AddMapApartmentsQueriesEndpoints(this WebApplication app)
     {
-        var apartmentsGroup = app.MapGroup("/apartment")
-            .RequireAuthorization(new AuthorizeAttribute
-            { 
-                Roles = "Admin"
-            });
+        var apartmentsGroup = app.MapGroup("api/v1/apartment");
+            // .RequireAuthorization(new AuthorizeAttribute
+            // { 
+            //     Roles = "Admin"
+            // });
 
         apartmentsGroup.MapGet("/groupby", async (IApartmentDapperService service) =>
         {

@@ -17,15 +17,15 @@ public class UserManagerWrapper : IUserManagerWrapper
     {
         return _userManager.CreateAsync(user, password);
     }
-
-    public Task<ApplicationUser?> FindByEmailAsync(string email)
-    {
-        return _userManager.FindByEmailAsync(email);
-    }
     
     public Task<ApplicationUser?> FindByNameAsync(string username)
     {
         return _userManager.FindByNameAsync(username);
+    }
+
+    public async Task<ApplicationUser?> FindByIdAsync(string userId)
+    {
+        return await _userManager.FindByIdAsync(userId);
     }
 
     public Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
