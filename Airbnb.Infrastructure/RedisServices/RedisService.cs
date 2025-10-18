@@ -2,9 +2,11 @@ using System.Text.Json;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
 using Microsoft.Extensions.Options;
+using Shared.Redis;
+using Shared.Redis.Redis;
 using StackExchange.Redis;
 
-namespace Airbnb.Infrastructure.Services;
+namespace Airbnb.Infrastructure.RedisServices;
 
 public class RedisService : IRedisService
 {

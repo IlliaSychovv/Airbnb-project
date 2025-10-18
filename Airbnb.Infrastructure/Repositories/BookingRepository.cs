@@ -31,12 +31,25 @@ public class BookingRepository : IBookingRepository
             .ToListAsync();
     }
 
+    public async Task<Booking?> GetByIdAsync(Guid bookingId)
+    {
+        return await _context.Bookings.FindAsync(bookingId);
+    }
+
     public async Task<bool> ExistsConflictAsync(Guid apartmentId, DateRange range)
     {
-        return await _context.Bookings.AnyAsync(b =>
-            b.ApartmentId == apartmentId &&
-            b.BookingDate <= range.End &&
-            range.Start <= b.EndBookingDate);
+        return await _context.Bookings
+            .AnyAsync(b =>
+                b.ApartmentId == apartmentId &&
+                b.Status != BookingStatus.Cancelled &&
+                b.BookingDate <= range.End &&
+                range.Start <= b.EndBookingDate);
+    }
+
+    public async Task UpdateAsync(Booking booking)
+    {
+        _context.Bookings.Update(booking);
+        await _context.SaveChangesAsync();
     }
 
     public async Task AddAsync(Booking booking)

@@ -20,14 +20,14 @@ public class Booking
             ApartmentId = apartmentId,
             BookingDate = range.Start,
             EndBookingDate = range.End,
-            Status = BookingStatus.Pending
+            Status = BookingStatus.PendingPayment
         };
     }
 }
 
 public enum BookingStatus
 {
-    Pending,
+    PendingPayment,
     Approved,
     Cancelled
 }

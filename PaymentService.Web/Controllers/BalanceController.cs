@@ -1,10 +1,13 @@
+using Contracts.Payment;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using PaymentService.Application.DTO;
 using PaymentService.Application.Interfaces;
 
 namespace PaymentService.Web.Controllers;
 
 [ApiController]
-[Route("api/v1/balance")]
+[Route("api/v1/balance/")]
 public class BalanceController : ControllerBase
 {
     private readonly IBalanceService _balanceService;
@@ -19,5 +22,20 @@ public class BalanceController : ControllerBase
     {
         var balance = await _balanceService.GetBalanceByUserId(id);
         return Ok(balance);
+    }
+
+    [HttpPost("transaction/withdraw")]
+    public async Task<IActionResult> WithdrawAsync(WithdrawRequest request)
+    {
+        var dto = request.Adapt<WithdrawDto>();
+        var withdraw = await _balanceService.WithdrawAsync(dto);
+        return Ok(withdraw);
+    }
+
+    [HttpPost("transaction/deposit")]
+    public async Task<IActionResult> DepositAsync(DepositDto dto)
+    {
+        var deposit = await _balanceService.DepositAsync(dto);
+        return Ok(deposit);
     }
 }

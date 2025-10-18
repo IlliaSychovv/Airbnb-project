@@ -8,7 +8,7 @@ public class KafkaTopicRegistry
     private static readonly Dictionary<Type, string> _map = new()
     {
         { typeof(UserCreatedEvent), KafkaTopics.Users },
-        { typeof(UserUpdatedEvent), KafkaTopics.Users }, 
+        { typeof(UserUpdatedEvent), KafkaTopics.Users }
     };
 
     public static string GetTopicFor<TEvent>()

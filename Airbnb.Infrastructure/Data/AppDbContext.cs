@@ -22,9 +22,18 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid
             entity.Property(p => p.Metadata)
                 .HasColumnType("jsonb");
         });
+
+        builder.Entity<BookingSagaJournal>()
+            .Property(x => x.Step)
+            .HasConversion<string>();
+        
+        builder.Entity<Booking>()
+            .Property(x => x.Status)
+            .HasConversion<string>();
     }
     
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Apartment> Apartments { get; set; }
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
+    public DbSet<BookingSagaJournal> BookingSagaJournals { get; set; }
 }

@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PaymentService.Domain\PaymentService.Domain.csproj" />
+      <ProjectReference Include="..\Shared.Redis\Shared.Redis.csproj" />
     </ItemGroup>
 
 </Project>

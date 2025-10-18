@@ -1,6 +1,7 @@
 using Airbnb.Application.Options;
 using Airbnb.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Shared.Redis.Redis;
 
 namespace Airbnb.Extensions;
 

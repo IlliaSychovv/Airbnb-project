@@ -18,13 +18,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
-        <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Airbnb.Application\Airbnb.Application.csproj" />
       <ProjectReference Include="..\Airbnb.Domain\Airbnb.Domain.csproj" />
+      <ProjectReference Include="..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\Shared.Kafka\Shared.Kafka.csproj" />
     </ItemGroup>
 
