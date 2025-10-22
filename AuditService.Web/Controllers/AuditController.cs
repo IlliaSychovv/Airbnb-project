@@ -15,9 +15,9 @@ public class AuditController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAuditChanges([FromQuery] Guid userId, [FromQuery] DateTime at)
+    public async Task<IActionResult> GetAuditChanges([FromQuery] Guid userId)
     {
-        var list = await _auditService.GetAuditChangesAsync(userId, at);
+        var list = await _auditService.GetAuditChangesAsync(userId);
         return Ok(list);
     }
 }

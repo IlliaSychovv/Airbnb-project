@@ -9,12 +9,12 @@ namespace AuditService.Infrastructure.Services;
 
 public class ProfileKafkaHandler : IKafkaMessageHandler<AuditDto>
 {
-    private readonly AppDbContext _dbContext;
+    private readonly MongoDbContext _mongoContext;
     private readonly ILogger<ProfileKafkaHandler> _logger;
 
-    public ProfileKafkaHandler(AppDbContext dbContext, ILogger<ProfileKafkaHandler> logger)
+    public ProfileKafkaHandler(MongoDbContext mongoContext, ILogger<ProfileKafkaHandler> logger)
     {
-        _dbContext = dbContext;
+        _mongoContext = mongoContext;
         _logger = logger;
     }
 
@@ -27,12 +27,12 @@ public class ProfileKafkaHandler : IKafkaMessageHandler<AuditDto>
         
         var entity = new Audit
         {
+            Id = Guid.NewGuid(),
             UserId = userId,
             CreatedAt = DateTime.UtcNow,
             ProfileJson = message
         };
 
-        _dbContext.Audits.Add(entity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _mongoContext.Audits.InsertOneAsync(entity, cancellationToken: cancellationToken);
     }
 }

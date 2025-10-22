@@ -4,5 +4,5 @@ namespace AuditService.Application.Interfaces;
 
 public interface IAuditService
 {
-    Task<AuditResponseDto> GetAuditChangesAsync(Guid userId, DateTime since);
+    Task<AuditResponseDto> GetAuditChangesAsync(Guid userId);
 }

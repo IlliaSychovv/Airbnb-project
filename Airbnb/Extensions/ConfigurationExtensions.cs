@@ -1,5 +1,6 @@
 using Airbnb.Application.Options;
 using Airbnb.Infrastructure.Data;
+using Airbnb.Infrastructure.Interceptor;
 using Microsoft.EntityFrameworkCore;
 using Shared.Redis.Redis;
 
@@ -15,8 +16,12 @@ public static class ConfigurationExtensions
         services.Configure<KafkaOptions>(
             configuration.GetSection("Kafka"));
 
-        services.AddDbContext<AppDbContext>(options => 
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<AppDbContext>((sp, options) =>
+        {
+            var interceptor = sp.GetRequiredService<AuditInterceptor>();
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+                .AddInterceptors(interceptor);
+        });
         
         return services;
     }

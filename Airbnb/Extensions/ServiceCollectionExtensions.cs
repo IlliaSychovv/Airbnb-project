@@ -10,6 +10,7 @@ using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
 using Airbnb.Application.Providers;
 using Airbnb.Infrastructure.Client;
+using Airbnb.Infrastructure.Interceptor;
 using Airbnb.Infrastructure.KafkaSender;
 using Airbnb.Infrastructure.RedisServices;
 using Airbnb.Infrastructure.Wrapper;
@@ -48,6 +49,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IApartmentService, ApartmentService>();
         services.AddScoped<IBookingService, BookingService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<AuditInterceptor>();
         
         services.Decorate<IUserRepository, CachedUserRepository>();
         

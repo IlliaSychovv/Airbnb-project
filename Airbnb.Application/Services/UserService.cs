@@ -39,11 +39,5 @@ public class UserService : IUserService
         
         dto.Adapt(user);
         await _userRepository.UpdateUserAsync(user);
-        
-        var updatedEvent = user.Adapt<UserUpdatedEvent>();  
-        var key = user.Id.ToString();
-        
-        await _eventSender.SendEvent(key, updatedEvent);
-        _logger.LogInformation("Kafka event sent {@updatedEvent}", updatedEvent);
     }
 }

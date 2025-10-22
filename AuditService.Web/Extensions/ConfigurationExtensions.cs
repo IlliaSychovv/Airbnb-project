@@ -1,7 +1,6 @@
 using AuditService.Application.Interfaces;
 using AuditService.Infrastructure.Clients;
 using AuditService.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using Polly;
 using Polly.Extensions.Http;
 using Shared.Kafka.Options;
@@ -14,9 +13,14 @@ public static class ConfigurationExtensions
     {
         services.Configure<KafkaOptions>(configuration.GetSection("Kafka"));
 
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
+        services.AddSingleton<MongoDbContext>(sp =>
+        {
+            var mongoSection = configuration.GetSection("MongoDb");
+            var connectionString = mongoSection["ConnectionString"];
+            var databaseName = mongoSection["DatabaseName"];
+            return new MongoDbContext(connectionString, databaseName);
+        });
+        
         services.AddHttpClient<IMonolithClient, MonolithClient>(client =>
             {
                 var baseUrl = configuration["MonolithApi:BaseUrl"];
