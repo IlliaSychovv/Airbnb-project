@@ -1,4 +1,3 @@
-using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.Interfaces;
 using Airbnb.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +7,12 @@ namespace Airbnb.Infrastructure.Interceptor;
 
 public class AuditInterceptor : SaveChangesInterceptor
 {
-    private readonly IEventSender? _eventSender;
+    private readonly IEnumerable<object> _mappers;
+    private readonly IEventSender _eventSender;
 
-    public AuditInterceptor(IEventSender eventSender = null)
+    public AuditInterceptor(IEnumerable<object> mappers, IEventSender eventSender)
     {
+        _mappers = mappers;
         _eventSender = eventSender;
     }
 
@@ -33,21 +34,27 @@ public class AuditInterceptor : SaveChangesInterceptor
                 entry.Entity.CreatedAt = DateTime.UtcNow;
             if (entry.State == EntityState.Modified)
                 entry.Entity.UpdatedAt = DateTime.UtcNow;
-
-            var auditEvent = new UserUpdatedEvent
-            {
-                Id = (Guid)entry.Property("Id").CurrentValue,
-                Name = entry.Property("Name").CurrentValue?.ToString(),
-                Email = entry.Property("Email").CurrentValue?.ToString(),
-                PhoneNumber = entry.Property("PhoneNumber").CurrentValue?.ToString(),
-                UpdatedAt = DateTime.UtcNow 
-            };
             
-            if (_eventSender != null)
+            var mapper = _mappers.FirstOrDefault(m =>
             {
-                var key = entry.Property("Id").CurrentValue?.ToString() ?? Guid.NewGuid().ToString();
-                await _eventSender.SendEvent(key, auditEvent);
-            }
+                var type = m.GetType()
+                    .GetInterfaces()
+                    .FirstOrDefault(i =>
+                        i.IsGenericType &&
+                        i.GetGenericTypeDefinition() == typeof(IAuditMapper<,>));
+
+                if (type == null) 
+                    return false;
+
+                var entityType = type.GetGenericArguments()[0];
+                return entityType.IsAssignableFrom(entry.Entity.GetType());
+            });
+
+            var mapMethod = mapper.GetType().GetMethod("Map");
+            var auditEvent = mapMethod.Invoke(mapper, new[] { entry.Entity });
+
+            var key = entry.Property("Id").CurrentValue?.ToString() ?? Guid.NewGuid().ToString();
+            await _eventSender.SendEvent(key, (dynamic)auditEvent);
         }
         
         return await base.SavingChangesAsync(eventData, result, cancellationToken);

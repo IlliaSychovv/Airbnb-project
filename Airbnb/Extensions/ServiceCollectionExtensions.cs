@@ -1,4 +1,5 @@
 using Airbnb.Application.BookingOrchestrator;
+using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.Services;
 using Airbnb.Application.Interfaces;
 using Airbnb.Infrastructure.Providers;
@@ -9,11 +10,14 @@ using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Options;
 using Airbnb.Application.Providers;
+using Airbnb.Domain.Entities;
 using Airbnb.Infrastructure.Client;
 using Airbnb.Infrastructure.Interceptor;
 using Airbnb.Infrastructure.KafkaSender;
+using Airbnb.Infrastructure.Mapper;
 using Airbnb.Infrastructure.RedisServices;
 using Airbnb.Infrastructure.Wrapper;
+using Contracts.VersionEvents;
 using Microsoft.Extensions.Options;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
@@ -38,7 +42,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IConnectionMultiplexer>(muxer);
 
         services.AddSingleton<IDatabase>(sp => sp.GetRequiredService<IConnectionMultiplexer>().GetDatabase());
-        
+
+        services.AddScoped<IAuditMapper<ApplicationUser, UserUpdatedEventV1>, UserAuditMapperV1>();
+        services.AddScoped<IEnumerable<object>>(sp =>
+            sp.GetServices<IAuditMapper<ApplicationUser, UserUpdatedEventV1>>().Cast<object>());
         services.AddScoped<IBookingDateRangeLockProvider, BookingDateRangeLockProvider>();
         services.AddScoped<IBookingSagaOrchestrator, BookingSagaOrchestrator>();
         services.AddScoped<IBookingSagaJournalRepository, BookingSagaJournalRepository>();
