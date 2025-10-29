@@ -52,28 +52,6 @@ public class AuditInterceptor : SaveChangesInterceptor
                 },
                 _ => Task.CompletedTask
             );
-
-
-            // var mapper = _mappers.FirstOrDefault(m =>
-            // {
-            //     var type = m.GetType()
-            //         .GetInterfaces()
-            //         .FirstOrDefault(i =>
-            //             i.IsGenericType &&
-            //             i.GetGenericTypeDefinition() == typeof(IAuditMapper<,>));
-            //
-            //     if (type == null) 
-            //         return false;
-            //
-            //     var entityType = type.GetGenericArguments()[0];
-            //     return entityType.IsAssignableFrom(entry.Entity.GetType());
-            // });
-            //
-            // var mapMethod = mapper.GetType().GetMethod("Map");
-            // var auditEvent = mapMethod.Invoke(mapper, new[] { entry.Entity });
-            //
-            // var key = entry.Property("Id").CurrentValue?.ToString() ?? Guid.NewGuid().ToString();
-            // await _eventSender.SendEvent(key, (dynamic)auditEvent);
         }
         
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
