@@ -2,8 +2,8 @@ using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
-using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.DTO.Authorization;
+using Contracts.MonolithEvents;
 using Mapster;
 using Microsoft.Extensions.Logging;
 

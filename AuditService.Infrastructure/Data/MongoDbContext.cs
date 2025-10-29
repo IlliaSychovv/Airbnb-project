@@ -14,4 +14,5 @@ public class MongoDbContext
     }
     
     public IMongoCollection<Audit> Audits => _database.GetCollection<Audit>("Audits");
+    public IMongoCollection<Apartment> Apartments => _database.GetCollection<Apartment>("Apartments");
 }

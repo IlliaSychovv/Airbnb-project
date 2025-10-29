@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AuditService.Infrastructure.Services;
 
-public class ProfileKafkaHandler : IKafkaMessageHandler<AuditDto>
+public class ProfileKafkaHandler : IKafkaMessageHandler<AuditUserDto>
 {
     private readonly MongoDbContext _mongoContext;
     private readonly ILogger<ProfileKafkaHandler> _logger;

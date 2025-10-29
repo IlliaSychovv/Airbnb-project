@@ -3,6 +3,7 @@ using AuditService.Application.Interfaces;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics.Metrics;
+using AuditService.Domain.Entity;
 
 namespace AuditService.Application.Services;
 
@@ -23,21 +24,29 @@ public class AuditService : IAuditService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AuditResponseDto> GetAuditChangesAsync(Guid userId)
+    public async Task<AuditUserResponseDto> GetUserChangesAsync(Guid userId)
     {
         _auditRequestedCounter.Add(1);
         
         var list = await _auditRepository.GetUserChanges(userId);
-        var auditDto = list.Adapt<List<AuditDto>>();
+        var auditDto = list.Adapt<List<AuditUserDto>>();
 
         var userLogins = await _monolithClient.GetUserLoginAsync(userId);
         var monolithPort = _httpContextAccessor.HttpContext.Connection.LocalPort;
 
-        return new AuditResponseDto
+        return new AuditUserResponseDto
         {
             Port = monolithPort,
             User = userLogins,
             Changes = auditDto
         };
+    }
+
+    public async Task<List<AuditApartmentDto>> GetApartmentsAsync(Guid apartmentId)
+    {
+        var list = await _auditRepository.GetApartmentChanges(apartmentId);
+        var apartmentDto = list.Adapt<List<AuditApartmentDto>>();
+
+        return apartmentDto;
     }
 }

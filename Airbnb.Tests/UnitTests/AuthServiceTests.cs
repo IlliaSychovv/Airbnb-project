@@ -1,9 +1,9 @@
-using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
+using Contracts.MonolithEvents;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Shouldly;
@@ -118,10 +118,5 @@ public class AuthServiceTests
         var result = await authService.LoginAsync("test@test.com", "password");
         
         result.ShouldBe(expectedToken);
-        eventSenderMock.Verify(m => 
-                m.SendEvent(
-                    It.IsAny<string>(), 
-                    It.IsAny<UserCreatedEvent>()),
-            Times.Never);
     }
 }

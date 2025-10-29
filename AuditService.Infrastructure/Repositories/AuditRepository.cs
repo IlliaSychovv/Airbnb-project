@@ -23,4 +23,14 @@ public class AuditRepository : IAuditRepository
 
         return list;
     }
+
+    public async Task<List<Apartment>> GetApartmentChanges(Guid apartmentId)
+    {
+        var filter = Builders<Apartment>.Filter.Eq(a => a.ApartmentId, apartmentId);
+        var list = await _context.Apartments
+            .Find(filter)
+            .ToListAsync();
+        
+        return list;
+    }
 }

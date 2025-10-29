@@ -5,4 +5,5 @@ namespace AuditService.Application.Interfaces;
 public interface IAuditRepository
 {
     Task<List<Audit>> GetUserChanges(Guid userId);
+    Task<List<Apartment>> GetApartmentChanges(Guid apartmentId);
 }

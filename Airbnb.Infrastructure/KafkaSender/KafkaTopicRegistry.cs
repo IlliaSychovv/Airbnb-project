@@ -1,6 +1,6 @@
-using Airbnb.Application.CreatedEvent;
+using Contracts.MonolithEvents;
 using Contracts.VersionEvents;
-using Shared.Kafka.Options;
+using Shared.Kafka.Topics;
 
 namespace Airbnb.Infrastructure.KafkaSender;
 
@@ -10,7 +10,8 @@ public class KafkaTopicRegistry
     {
         { typeof(UserCreatedEvent), KafkaTopics.Users },
         { typeof(UserUpdatedEvent), KafkaTopics.Users },
-        { typeof(UserUpdatedEventV1), KafkaTopics.Users}
+        { typeof(UserUpdatedEventV1), KafkaTopics.Users},
+        { typeof(ApartmentUpdatedEvent), KafkaTopics.Apartments}
     };
 
     public static string GetTopicFor<TEvent>()

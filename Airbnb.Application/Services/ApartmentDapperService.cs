@@ -16,7 +16,6 @@ public class ApartmentDapperService : IApartmentDapperService
 
     public async Task Upsert(ApartmentUpsertDto dto)
     {
-        dto.Metadata = JsonSerializer.Serialize(dto.Metadata);
         await _apartmentDapperRepository.UpsertAsync(dto);
     }
 

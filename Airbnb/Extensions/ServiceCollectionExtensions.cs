@@ -1,5 +1,4 @@
 using Airbnb.Application.BookingOrchestrator;
-using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.Services;
 using Airbnb.Application.Interfaces;
 using Airbnb.Infrastructure.Providers;
@@ -16,6 +15,7 @@ using Airbnb.Infrastructure.Interceptor;
 using Airbnb.Infrastructure.KafkaSender;
 using Airbnb.Infrastructure.Mapper;
 using Airbnb.Infrastructure.RedisServices;
+using Airbnb.Infrastructure.RepositoriesDecorator;
 using Airbnb.Infrastructure.Wrapper;
 using Contracts.VersionEvents;
 using Microsoft.Extensions.Options;
@@ -59,6 +59,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<AuditInterceptor>();
         
         services.Decorate<IUserRepository, CachedUserRepository>();
+        services.Decorate<IApartmentDapperRepository, ApartmentDapperDecorator>();
         
         services.AddSingleton<IRedisService, RedisService>();
         services.AddSingleton<INpgsqlProvider, NpgsqlProvider>();

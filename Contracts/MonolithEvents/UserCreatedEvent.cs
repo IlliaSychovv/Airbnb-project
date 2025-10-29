@@ -1,4 +1,4 @@
-namespace Airbnb.Application.CreatedEvent;
+namespace Contracts.MonolithEvents;
 
 public record UserCreatedEvent
 {

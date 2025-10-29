@@ -1,6 +1,6 @@
 namespace AuditService.Application.DTO;
 
-public record AuditDto
+public record AuditUserDto
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

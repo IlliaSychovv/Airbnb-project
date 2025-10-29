@@ -1,11 +1,9 @@
-using Airbnb.Application.CreatedEvent;
 using Airbnb.Application.DTO;
 using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Mapster;
-using Microsoft.Extensions.Logging;
 
 namespace Airbnb.Application.Services;
 
@@ -13,16 +11,11 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IUserManagerWrapper _userManagerWrapper;
-    private readonly IEventSender _eventSender;
-    private readonly ILogger<UserService> _logger;
 
-    public UserService(IUserRepository userRepository, IUserManagerWrapper userManagerWrapper,
-        IEventSender eventSender, ILogger<UserService> logger)
+    public UserService(IUserRepository userRepository, IUserManagerWrapper userManagerWrapper)
     {
         _userRepository = userRepository;
         _userManagerWrapper = userManagerWrapper;
-        _eventSender = eventSender;
-        _logger = logger;
     }
 
     public async Task<UserProfileDto?> GetUserProfileAsync(Guid userId)
