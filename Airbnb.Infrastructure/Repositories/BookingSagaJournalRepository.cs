@@ -1,4 +1,4 @@
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Domain.Entities;
 using Airbnb.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Kafka.Options;
+using Shared.Kafka.Topics;
 
 namespace Shared.Kafka.Kafka;
 
@@ -13,13 +14,15 @@ public class KafkaConsumer<T> : BackgroundService
      private readonly IServiceProvider _serviceProvider;
      private readonly ILogger<KafkaConsumer<T>> _logger;
      private readonly KafkaOptions _options;
+     private readonly string[] _topics;
 
      public KafkaConsumer(IServiceProvider serviceProvider, IOptions<KafkaOptions> options,
-          ILogger<KafkaConsumer<T>> logger)
+          ILogger<KafkaConsumer<T>> logger, IEnumerable<string> topics)
      {
           _serviceProvider = serviceProvider;
           _logger = logger;
           _options = options.Value;
+          _topics = topics.ToArray();
      }
      
      protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,7 +40,9 @@ public class KafkaConsumer<T> : BackgroundService
           };
           
           var consumer = new ConsumerBuilder<string, string>(config).Build(); 
-          consumer.Subscribe(new[] { KafkaTopics.Users});
+          consumer.Subscribe(_topics);
+          _logger.LogDebug("Kafka consumer for type {Type} subscribed to topics: {Topics}", typeof(T).Name, string.Join(", ", _topics));
+          //consumer.Subscribe(new[] { KafkaTopics.Users});
      
           try
           {

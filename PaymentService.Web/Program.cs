@@ -11,6 +11,7 @@ using RedLockNet.SERedis.Configuration;
 using Shared.Kafka.Interfaces;
 using Shared.Kafka.Kafka;
 using Shared.Kafka.Options;
+using Shared.Kafka.Topics;
 using Shared.Redis.Redis;
 using StackExchange.Redis;
 
@@ -43,7 +44,16 @@ builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddScoped<IKafkaMessageHandler<UserCreatedEvent>, UserCreatedBalanceHandler>();
 
-builder.Services.AddHostedService<KafkaConsumer<UserCreatedEvent>>();
+
+builder.Services.AddHostedService<KafkaConsumer<UserCreatedEvent>>(provider => 
+        new KafkaConsumer<UserCreatedEvent>(
+            provider,
+            provider.GetRequiredService<IOptions<KafkaOptions>>(),
+            provider.GetRequiredService<ILogger<KafkaConsumer<UserCreatedEvent>>>(),
+            new[] { KafkaTopics.Users }  
+        )
+    );
+//builder.Services.AddHostedService<KafkaConsumer<UserCreatedEvent>>();
 
 var app = builder.Build();
 

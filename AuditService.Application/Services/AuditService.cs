@@ -15,28 +15,37 @@ public class AuditService : IAuditService
     private static readonly Counter<long> _auditRequestedCounter =
         _meter.CreateCounter<long>("business_audit_requested_total", description: "Total number of times audits were requested");
 
-    public AuditService(IAuditRepository auditRepository, IMonolithClient monolithClient, IHttpContextAccessor httpContextAccessor)
+    public AuditService(IAuditRepository auditRepository, IMonolithClient monolithClient, 
+        IHttpContextAccessor httpContextAccessor)
     {
         _auditRepository = auditRepository;
         _monolithClient = monolithClient;
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AuditResponseDto> GetAuditChangesAsync(Guid userId, DateTime since)
+    public async Task<AuditUserResponseDto> GetUserChangesAsync(Guid userId)
     {
         _auditRequestedCounter.Add(1);
         
-        var list = await _auditRepository.GetUserChanges(userId, since);
-        var auditDto = list.Adapt<List<AuditDto>>();
+        var list = await _auditRepository.GetUserChanges(userId);
+        var auditDto = list.Adapt<List<AuditUserDto>>();
 
         var userLogins = await _monolithClient.GetUserLoginAsync(userId);
         var monolithPort = _httpContextAccessor.HttpContext.Connection.LocalPort;
 
-        return new AuditResponseDto
+        return new AuditUserResponseDto
         {
             Port = monolithPort,
             User = userLogins,
             Changes = auditDto
         };
+    }
+
+    public async Task<List<AuditApartmentDto>> GetApartmentsAsync(Guid apartmentId)
+    {
+        var list = await _auditRepository.GetApartmentChanges(apartmentId);
+        var apartmentDto = list.Adapt<List<AuditApartmentDto>>();
+
+        return apartmentDto;
     }
 }
