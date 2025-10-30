@@ -1,4 +1,4 @@
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Wrappers;
 using Airbnb.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 

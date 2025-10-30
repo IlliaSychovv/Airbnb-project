@@ -68,7 +68,7 @@ app.UseExceptionHandler(appBuilder =>
 
 app.UseOpenTelemetryPrometheusScrapingEndpoint();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging(opts =>
 {

@@ -1,4 +1,5 @@
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Kafka;
+using Airbnb.Application.Interfaces.Mappers;
 using Airbnb.Domain.Entities;
 using Airbnb.Domain.Interfaces;
 using Contracts.VersionEvents;

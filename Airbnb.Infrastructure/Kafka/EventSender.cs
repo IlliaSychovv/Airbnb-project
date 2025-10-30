@@ -1,11 +1,12 @@
 using System.Text.Json;
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Kafka;
 using Airbnb.Domain.Entities;
 using Airbnb.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Kafka.Interfaces;
+using Shared.Kafka.Topics;
 
-namespace Airbnb.Infrastructure.KafkaSender;
+namespace Airbnb.Infrastructure.Kafka;
 
 public class EventSender : IEventSender
 {

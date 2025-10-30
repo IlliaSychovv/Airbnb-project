@@ -1,4 +1,4 @@
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Kafka;
 
 public interface IEventSender
 { 

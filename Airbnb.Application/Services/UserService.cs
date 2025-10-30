@@ -1,8 +1,8 @@
 using Airbnb.Application.DTO;
 using Airbnb.Application.DTO.Authorization;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
+using Airbnb.Application.Interfaces.Wrappers;
 using Mapster;
 
 namespace Airbnb.Application.Services;

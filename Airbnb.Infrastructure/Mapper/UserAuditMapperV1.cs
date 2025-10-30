@@ -1,4 +1,4 @@
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Mappers;
 using Airbnb.Domain.Entities;
 using Contracts.VersionEvents;
 

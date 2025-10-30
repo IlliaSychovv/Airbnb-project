@@ -10,5 +10,5 @@ public record ApartmentUpsertDto
     public string Location { get; set; }
     public decimal Price { get; set; }
     public string ExternalId { get; set; }
-    public object Metadata { get; set; }
+    public string Metadata { get; set; }
 }

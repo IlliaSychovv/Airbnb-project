@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shared.Kafka.Interfaces;
 
-namespace Airbnb.Infrastructure.KafkaSender;
+namespace Airbnb.Infrastructure.Kafka;
 
 public class OutboxPublisher : BackgroundService
 {

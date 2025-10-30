@@ -20,7 +20,10 @@ public class AuthController : ControllerBase
         var result = await _authService.RegisterUserAsync(dto);
 
         if (result.Succeeded)
-            return Created(string.Empty, new { Email = dto.Email });
+            return Created(string.Empty, new
+            {
+                Message = $"User {dto.Email} successfully created with default balance 0$"
+            });
         
         return BadRequest(result.Errors);
     }

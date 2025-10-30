@@ -3,7 +3,6 @@ using AuditService.Application.Interfaces;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics.Metrics;
-using AuditService.Domain.Entity;
 
 namespace AuditService.Application.Services;
 

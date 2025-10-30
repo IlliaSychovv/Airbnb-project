@@ -1,4 +1,4 @@
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Mappers;
 
 public interface IAuditMapper<TEntity, TEvent>
 {

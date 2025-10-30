@@ -1,6 +1,8 @@
 using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Kafka;
 using Airbnb.Application.Interfaces.Services;
+using Airbnb.Application.Interfaces.Wrappers;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
 using Contracts.MonolithEvents;

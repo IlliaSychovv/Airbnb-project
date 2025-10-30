@@ -2,22 +2,23 @@ using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
+using Airbnb.Application.Interfaces.Wrappers;
 using Airbnb.Domain.Entities;
 using Mapster;
 using Microsoft.Extensions.Logging;
 
-namespace Airbnb.Infrastructure.Repositories;
+namespace Airbnb.Infrastructure.RepositoriesDecorator;
 
-public class CachedUserRepository : IUserRepository
+public class CachedUserRepositoryDecorator : IUserRepository
 {
     private const string MonolithPrefix = "Monolith";
     private readonly IUserRepository _repo;
     private readonly IRedisService _redis;
     private readonly IUserManagerWrapper _userManager;
-    private readonly ILogger<CachedUserRepository> _logger;
+    private readonly ILogger<CachedUserRepositoryDecorator> _logger;
 
-    public CachedUserRepository(IUserRepository repo, IRedisService redis, 
-        IUserManagerWrapper userManager, ILogger<CachedUserRepository> logger)
+    public CachedUserRepositoryDecorator(IUserRepository repo, IRedisService redis, 
+        IUserManagerWrapper userManager, ILogger<CachedUserRepositoryDecorator> logger)
     {
         _repo = repo;
         _redis = redis;

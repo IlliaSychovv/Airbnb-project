@@ -1,5 +1,4 @@
 using Airbnb.Application.DTO.Migrations;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;

@@ -1,6 +1,6 @@
 using Airbnb.Application.DTO.Migrations;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Services;
 
 public interface IJsonDataReader
 {

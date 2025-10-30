@@ -1,6 +1,6 @@
 using Airbnb.Domain.Entities;
 
-namespace Airbnb.Application.Interfaces;
+namespace Airbnb.Application.Interfaces.Repositories;
 
 public interface IBookingSagaJournalRepository
 {

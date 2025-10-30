@@ -1,5 +1,5 @@
 using Airbnb.Application.DTO.Migrations;
-using Airbnb.Application.Interfaces;
+using Airbnb.Application.Interfaces.Services;
 using Newtonsoft.Json;
 
 namespace Airbnb.Infrastructure.Services;

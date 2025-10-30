@@ -1,8 +1,7 @@
 using Contracts.MonolithEvents;
 using Contracts.VersionEvents;
-using Shared.Kafka.Topics;
 
-namespace Airbnb.Infrastructure.KafkaSender;
+namespace Shared.Kafka.Topics;
 
 public class KafkaTopicRegistry
 {

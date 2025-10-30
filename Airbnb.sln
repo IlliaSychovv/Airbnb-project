@@ -52,7 +52,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Cont
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monolith", "Monolith", "{88981F7C-D061-44B3-BFFB-B2FF2F5A499F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditService.Tests", "AuditService.Tests\AuditService.Tests.csproj", "{BEECAC4D-A3F2-46EE-8413-1C1F9A4B245A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditServices.Tests", "AuditServices.Tests\AuditServices.Tests.csproj", "{BEECAC4D-A3F2-46EE-8413-1C1F9A4B245A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService.Tests", "PaymentService.Tests\PaymentService.Tests.csproj", "{CA52B29F-9F28-4554-A624-23AB8BA6F41C}"
 EndProject
