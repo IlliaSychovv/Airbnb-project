@@ -1,5 +1,4 @@
 using Airbnb.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.DTO.Authorization;
 using Airbnb.Application.Interfaces.Kafka;
@@ -26,7 +25,7 @@ public class AuthService : IAuthService
         _logger = logger;
      }
 
-    public async Task<IdentityResult> RegisterUserAsync(RegisterDto dto)
+    public async Task<RegisterResponseDto> RegisterUserAsync(RegisterDto dto)
     {
         var user = dto.Adapt<ApplicationUser>();
         user.UserName = dto.Name;
@@ -45,8 +44,11 @@ public class AuthService : IAuthService
             await _eventSender.SaveToOutbox(userEvent, key);
             _logger.LogInformation("Send to Outbox event {@userEvent} for user {user.Id}", userEvent, user.Id);
         }
-        
-        return result;
+
+        return new RegisterResponseDto
+        {
+            UserId = user.Id,
+        };
     }
     
     public async Task<string?> LoginAsync(string username, string password)

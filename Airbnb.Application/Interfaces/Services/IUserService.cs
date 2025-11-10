@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<UserProfileDto?> GetUserProfileAsync(Guid userId);
     Task UpdateUserAsync(UpdateDto dto, string userId);
+    Task<BalanceResponse> GetUserBalanceAsync(string userId);
 }

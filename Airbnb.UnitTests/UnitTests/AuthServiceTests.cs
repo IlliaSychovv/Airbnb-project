@@ -1,5 +1,4 @@
 using Airbnb.Application.DTO.Authorization;
-using Airbnb.Application.Interfaces;
 using Airbnb.Application.Interfaces.Kafka;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Application.Interfaces.Wrappers;
@@ -23,7 +22,7 @@ public class AuthServiceTests
             Email = "test@test.com",
             Password = "password"
         };
-
+    
         var userManagerMock = new Mock<IUserManagerWrapper>();
         userManagerMock
             .Setup(m => m.CreateAsync(It.IsAny<ApplicationUser>(), dto.Password))
@@ -32,13 +31,13 @@ public class AuthServiceTests
         var jwtTokenServiceMock = new Mock<IJwtTokenService>();
         var eventSenderMock = new Mock<IEventSender>();
         var loggerMock = new Mock<ILogger<AuthService>>();
-
+    
         var authService = new AuthService(userManagerMock.Object, jwtTokenServiceMock.Object, 
             eventSenderMock.Object, loggerMock.Object);
         
         var result = await authService.RegisterUserAsync(dto);
         
-        result.Succeeded.ShouldBeTrue(); 
+        result.ShouldBe(new RegisterResponseDto()); 
         eventSenderMock.Verify(m => 
             m.SaveToOutbox(
                 It.IsAny<UserCreatedEvent>(),
@@ -60,7 +59,7 @@ public class AuthServiceTests
         {
             Description = "Unfortunately user is not created"
         });
-
+    
         var userManagerMock = new Mock<IUserManagerWrapper>();
         userManagerMock
             .Setup(m => m.CreateAsync(It.IsAny<ApplicationUser>(), dto.Password))
@@ -75,7 +74,7 @@ public class AuthServiceTests
         
         var result = await authService.RegisterUserAsync(dto);
         
-        result.Succeeded.ShouldBeFalse(); 
+        result.UserId.ShouldBe(Guid.Empty); 
         eventSenderMock.Verify(m => 
                 m.SendEvent(
                     It.IsAny<string>(), 
