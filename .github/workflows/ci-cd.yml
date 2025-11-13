@@ -25,7 +25,7 @@ jobs:
         run: dotnet build Airbnb.sln --configuration Release --no-restore
 
       - name: Run Unit Tests
-        run: dotnet test Airbnb.Tests/Airbnb.Tests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
+        run: dotnet test Airbnb.UnitTests/Airbnb.UnitTests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" --results-directory ./TestResults
 
       - name: Publish Test Report
         uses: actions/upload-artifact@v4
@@ -36,7 +36,7 @@ jobs:
       - name: Generate coverage report
         run: |
           dotnet tool install --global dotnet-reportgenerator-globaltool
-          dotnet test Airbnb.Tests/Airbnb.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults
+          dotnet test Airbnb.UnitTests/Airbnb.UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults
           reportgenerator -reports:./TestResults/**/coverage.cobertura.xml -targetdir:./TestResults/CoverageReport -reporttypes:Html
 
       - name: Upload coverage report

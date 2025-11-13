@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Airbnb.Controllers;
 
 [ApiController]
-[Route("api/v1/users")]
+[Route("api/v1/users/")]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -27,5 +27,12 @@ public class UsersController : ControllerBase
     {
         var userProfile = await _userService.GetUserProfileAsync(userId);
         return Ok(userProfile);
+    }
+
+    [HttpGet("balance/{userId}")]
+    public async Task<IActionResult> GetBalance(string userId)
+    {
+        var userBalance = await _userService.GetUserBalanceAsync(userId);
+        return Ok(userBalance);
     }
 }

@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using Airbnb.Application.DTO;
 using Airbnb.Application.Interfaces;
 using Contracts.Payment;
 using Microsoft.Extensions.Logging;
@@ -40,6 +41,22 @@ public class PaymentClient : IPaymentClient
         {
             _logger.LogDebug("Error while calling method transaction withdraw: " + ex.Message);
             return false;
+        }
+    }
+
+    public async Task<BalanceResponse> GetUserBalanceAsync(Guid userId)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"/api/v1/balance/{userId}");
+            response.EnsureSuccessStatusCode();
+            
+            return await response.Content.ReadFromJsonAsync<BalanceResponse>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug("Error while calling method get user balance: " + ex.Message);
+            return null;
         }
     }
 }
