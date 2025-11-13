@@ -36,7 +36,7 @@ jobs:
       - name: Generate coverage report
         run: |
           dotnet tool install --global dotnet-reportgenerator-globaltool
-          dotnet test Airbnb.Tests/Airbnb.Tests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults
+          dotnet test Airbnb.UnitTests/Airbnb.UnitTests.csproj --collect:"XPlat Code Coverage" --results-directory ./TestResults
           reportgenerator -reports:./TestResults/**/coverage.cobertura.xml -targetdir:./TestResults/CoverageReport -reporttypes:Html
 
       - name: Upload coverage report
