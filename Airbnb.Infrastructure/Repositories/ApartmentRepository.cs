@@ -1,4 +1,3 @@
-using Airbnb.Application.DTO;
 using Airbnb.Application.DTO.Pagination;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Infrastructure.Data;
