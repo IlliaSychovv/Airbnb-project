@@ -1,3 +1,5 @@
+using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Pagination;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Infrastructure.Data;
 using Airbnb.Domain.Entities;
@@ -15,43 +17,79 @@ public class ApartmentRepository : IApartmentRepository
         _context = context;
     }
 
-    public async Task<IReadOnlyList<Apartment>> GetAsync(int pageNumber, int pageSize, string? location = null)
+    public async Task<PagedResult<Apartment>> GetAllApartmentsAsync(int pageNumber, int pageSize, string? location = null)
     {
         var query = _context.Apartments.AsQueryable();
         if (!string.IsNullOrWhiteSpace(location))
             query = query.Where(a => a.Location.Contains(location));
         
-        return await query
-            .OrderByDescending(a => a.Id)
-            .Skip(pageSize * pageNumber)
+        var totalCount = await query.CountAsync();
+        
+        var items = await query
+            .OrderByDescending(a => a.Price)
+            .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
-            .ToListAsync(); 
-    }
+            .ToListAsync();
 
-    public async Task<int> GetTotalCountAsync(string? location = null)
-    {
-        var query = _context.Apartments.AsQueryable();
-        
-        if (!string.IsNullOrWhiteSpace(location))
-            query = query.Where(a => a.Location.Contains(location));
-        
-        return await query.CountAsync();
+        return new PagedResult<Apartment>
+        {
+            Items = items,
+            TotalCount = totalCount
+        };
     }
     
-    public async Task<Apartment> GetByIdAsync(Guid apartmentId)
+    public async Task<PagedResult<Apartment>> GetAvailableApartmentsAsync(DateRange range, int pageNumber, int pageSize,
+        decimal? minPrice = null, decimal? maxPrice = null)
     {
-        return await _context.Apartments.FindAsync(apartmentId);
-    }
-    
-    public async Task<List<Apartment>> GetAvailableApartmentsAsync(DateRange range)
-    {
-        return await _context.Apartments
+        var query = _context.Apartments
+            .AsNoTracking()
             .Include(a => a.Bookings)
             .Where(apartment => !apartment.Bookings
                 .Any(b => b.ApartmentId == apartment.Id &&
                           b.BookingDate <= range.End &&
-                          range.Start <= b.EndBookingDate))
+                          range.Start <= b.EndBookingDate));
+
+        if (minPrice.HasValue)
+            query = query.Where(a => a.Price >= minPrice.Value);
+        
+        if (maxPrice.HasValue)
+            query = query.Where(a => a.Price <= maxPrice.Value);
+        
+        var totalCount = await query.CountAsync();
+        
+        var items = await query
+            .OrderByDescending(a => a.Price)
+            .Skip(pageSize * (pageNumber - 1))
+            .Take(pageSize)
             .ToListAsync();
+
+        return new PagedResult<Apartment>
+        {
+            Items = items,
+            TotalCount = totalCount
+        };
+    }
+
+    public async Task<PagedResult<Apartment>> GetAllApartmentsWithBookingsAsync(int pageNumber, int pageSize)
+    {
+        var query =  _context.Apartments
+            .AsNoTracking()
+            .Include(a => a.Bookings)
+            .Where(a => a.Bookings.Any());
+        
+        var totalCount = await query.CountAsync();
+        
+         var item = await query
+            .OrderByDescending(a => a.Price)
+            .Skip(pageSize * (pageNumber - 1))
+            .Take(pageSize)
+            .ToListAsync();
+
+         return new PagedResult<Apartment>
+         {
+             Items = item,
+             TotalCount = totalCount
+         };
     }
 
     public async Task AddAsync(Apartment apartment)

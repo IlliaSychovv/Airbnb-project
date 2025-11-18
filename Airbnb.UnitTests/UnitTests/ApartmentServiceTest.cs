@@ -1,7 +1,9 @@
 using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Pagination;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Services;
 using Airbnb.Domain.Entities;
+using Airbnb.Domain.ValueObject;
 using Moq;
 using Shouldly;
 
@@ -44,27 +46,81 @@ public class ApartmentServiceTest
     {
         int pageNumber = 1;
         int pageSize = 5;
+        int totalCount = 1;
         string location = null;
         
-        var apartment = new List<Apartment>()
+        var apartments = new PagedResult<Apartment>
         {
-            new Apartment { Title = "testTitle1", Description = "testDescription1", Location = "testLocation1", Price = 100 },
-            new Apartment() { Title = "testTitle2", Description = "testDescription2", Location = "testLocation2", Price = 200 }
+            Items = new List<Apartment>(),
+            TotalCount = totalCount
         };
         
         _apartmentRepository
-            .Setup(x => x.GetAsync(pageNumber, pageSize, location))
-            .ReturnsAsync(apartment);
-
-        _apartmentRepository
-            .Setup(x => x.GetTotalCountAsync(location))
-            .ReturnsAsync(10);
+            .Setup(x => x.GetAllApartmentsAsync(pageNumber, pageSize, location))
+            .ReturnsAsync(apartments);
         
         var result = await _apartmentService.GetPagedApartmentsAsync(pageNumber, pageSize, location);
         
         result.ShouldNotBeNull();
-        result.TotalCount.ShouldBe(10);
+        result.TotalCount.ShouldBe(1);
         result.PageSize.ShouldBe(5);
-        _apartmentRepository.Verify(x => x.GetAsync(pageNumber, pageSize, location), Times.Once);
+        _apartmentRepository.Verify(x => x.GetAllApartmentsAsync(pageNumber, pageSize, location), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetAllApartmentsWithBookings_ShouldReturnPagedList_WhenWeCallMethod()
+    {
+        int pageNumber = 1;
+        int pageSize = 5;
+        int totalCount = 1;
+
+        var apartments = new PagedResult<Apartment>
+        {
+            Items = new List<Apartment>(),
+            TotalCount = totalCount
+        };
+        
+        _apartmentRepository
+            .Setup(x => x.GetAllApartmentsWithBookingsAsync(pageNumber, pageSize))
+            .ReturnsAsync(apartments);
+        
+        var result = await _apartmentService.GetAllApartmentsWithBookings(pageNumber, pageSize);
+        
+        result.ShouldNotBeNull();
+        result.TotalCount.ShouldBe(1);
+        result.PageSize.ShouldBe(5);
+        _apartmentRepository.Verify(x => x.GetAllApartmentsWithBookingsAsync(pageNumber, pageSize), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetAvailableApartments_ShouldReturnPagedList_WhenWeCallMethod()
+    {
+        int pageNumber = 1;
+        int pageSize = 5;
+        int totalCount = 1;
+        
+        decimal minPrice = 100;
+        decimal maxPrice = 200;
+        
+        DateTime startDate = new DateTime(2020, 1, 1);
+        DateTime endDate = new DateTime(2020, 11, 10);
+        DateRange range = new DateRange(startDate, endDate);
+
+        var apartments = new PagedResult<Apartment>
+        {
+            Items = new List<Apartment>(),
+            TotalCount = totalCount
+        };
+
+        _apartmentRepository
+            .Setup(x => x.GetAvailableApartmentsAsync(range, pageNumber, pageSize, minPrice, maxPrice))
+            .ReturnsAsync(apartments);
+        
+        var result = await _apartmentService.GetAvailableApartments(range, pageNumber, pageSize, minPrice, maxPrice);
+        
+        result.ShouldNotBeNull();
+        result.TotalCount.ShouldBe(1);
+        result.PageSize.ShouldBe(5);
+        _apartmentRepository.Verify(x => x.GetAvailableApartmentsAsync(range, pageNumber, pageSize, minPrice, maxPrice), Times.Once);
     }
 }

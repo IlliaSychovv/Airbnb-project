@@ -158,6 +158,7 @@ public class DataMigrationService : IDataMigrationService
                 var newUser = userExternal.Adapt<ApplicationUser>();
                 newUser.UserName = newUser.Name;
                 newUser.Role = "Client";
+                
                 var createUser = await _userManager.CreateAsync(newUser, DefaultPassword);
                 if (!createUser.Succeeded)
                 {
