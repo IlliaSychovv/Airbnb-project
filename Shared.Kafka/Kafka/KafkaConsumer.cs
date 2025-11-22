@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.Kafka.Options;
-using Shared.Kafka.Topics;
 
 namespace Shared.Kafka.Kafka;
 
@@ -42,7 +41,6 @@ public class KafkaConsumer<T> : BackgroundService
           var consumer = new ConsumerBuilder<string, string>(config).Build(); 
           consumer.Subscribe(_topics);
           _logger.LogDebug("Kafka consumer for type {Type} subscribed to topics: {Topics}", typeof(T).Name, string.Join(", ", _topics));
-          //consumer.Subscribe(new[] { KafkaTopics.Users});
      
           try
           {

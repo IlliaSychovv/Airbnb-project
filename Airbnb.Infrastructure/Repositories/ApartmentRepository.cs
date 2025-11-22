@@ -15,10 +15,10 @@ public class ApartmentRepository : IApartmentRepository
     {
         _context = context;
     }
-
+    
     public async Task<PagedResult<Apartment>> GetAllApartmentsAsync(int pageNumber, int pageSize, string? location = null)
     {
-        var query = _context.Apartments.AsQueryable();
+        var query = _context.Apartments.AsNoTracking().AsQueryable();
         if (!string.IsNullOrWhiteSpace(location))
             query = query.Where(a => a.Location.Contains(location));
         
