@@ -47,7 +47,7 @@ public class AuthService : IAuthService
 
         return new RegisterResponseDto
         {
-            UserId = user.Id,
+            UserId = user.Id
         };
     }
     

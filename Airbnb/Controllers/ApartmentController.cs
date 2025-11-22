@@ -1,6 +1,8 @@
 using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Pagination;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
+using Airbnb.Domain.ValueObject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,5 +35,23 @@ public class ApartmentController : ControllerBase
     {
         var pagedResult = await _apartmentService.GetPagedApartmentsAsync(pageNumber, pageSize, location);
         return Ok(pagedResult);
+    }
+
+    [HttpGet("reserved")]
+    public async Task<ActionResult<PagedResponse<ApartmentDto>>> GetReservedApartments([FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 10)
+    {
+        var reservedApartments = await _apartmentService.GetAllApartmentsWithBookings(pageNumber, pageSize);
+        return Ok(reservedApartments);
+    }
+
+    [HttpGet("available")]
+    public async Task<ActionResult<PagedResponse<ApartmentDto>>> GetAvailableApartments([FromQuery] DateTime startDate, 
+        [FromQuery] DateTime endDate, [FromQuery] int pageNumber = 1 , [FromQuery] int pageSize = 10,
+        [FromQuery] decimal? minPrice = null, [FromQuery] decimal? maxPrice = null)
+    {
+        var range = new DateRange(startDate, endDate);
+        var availableApartments = await _apartmentService.GetAvailableApartments(range, pageNumber, pageSize, minPrice, maxPrice);
+        
+        return Ok(availableApartments);
     }
 }

@@ -1,4 +1,4 @@
-namespace Airbnb.Application.DTO;
+namespace Airbnb.Application.DTO.Pagination;
 
 public record PagedResponse<T>
 {

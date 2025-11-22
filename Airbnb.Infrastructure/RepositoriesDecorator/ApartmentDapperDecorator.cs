@@ -2,7 +2,6 @@ using Airbnb.Application.DTO.Dappers;
 using Airbnb.Application.Interfaces.Kafka;
 using Airbnb.Application.Interfaces.Repositories;
 using Contracts.MonolithEvents;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Airbnb.Infrastructure.RepositoriesDecorator;
 
@@ -30,7 +29,6 @@ public class ApartmentDapperDecorator : IApartmentDapperRepository
             Location = dto.Location,
             ExternalId = dto.ExternalId, 
             Metadata = dto.Metadata
-            //Metadata = JsonSerializer.Serialize(dto.Metadata) 
         };
         
         await _eventSender.SendEvent(dto.Id.ToString(), eventDto);

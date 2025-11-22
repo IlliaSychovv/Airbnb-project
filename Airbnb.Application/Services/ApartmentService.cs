@@ -1,8 +1,10 @@
 using System.Diagnostics.Metrics;
 using Airbnb.Application.DTO;
+using Airbnb.Application.DTO.Pagination;
 using Airbnb.Application.Interfaces.Repositories;
 using Airbnb.Application.Interfaces.Services;
 using Airbnb.Domain.Entities;
+using Airbnb.Domain.ValueObject;
 using Mapster;
 using SequentialGuid;
 
@@ -38,14 +40,41 @@ public class ApartmentService : IApartmentService
     {
         _apartmentsRequestedCounter.Add(1);
         
-        var item = await _apartmentRepository.GetAsync(pageNumber, pageSize, location);
-        var totalCount = await _apartmentRepository.GetTotalCountAsync(location);
+        var pagedResult = await _apartmentRepository.GetAllApartmentsAsync(pageNumber, pageSize, location);
 
         return new PagedResponse<Apartment>
         {
-            Items = item.ToList(),
-            TotalCount = totalCount,
-            PageSize = pageSize
+            Items = pagedResult.Items.ToList(),
+            TotalCount = pagedResult.TotalCount,
+            PageSize = pageSize,
+            CurrentPage = pageNumber
+        };
+    }
+
+    public async Task<PagedResponse<ApartmentDto>> GetAllApartmentsWithBookings(int pageNumber, int pageSize)
+    {
+        var pagedResult = await _apartmentRepository.GetAllApartmentsWithBookingsAsync(pageNumber, pageSize);
+
+        return new PagedResponse<ApartmentDto>
+        {
+            Items = pagedResult.Items.Select(a => a.Adapt<ApartmentDto>()).ToList(),
+            TotalCount = pagedResult.TotalCount,
+            PageSize = pageSize,
+            CurrentPage = pageNumber
+        };
+    }
+
+    public async Task<PagedResponse<ApartmentDto>> GetAvailableApartments(DateRange range, int pageNumber, int pageSize,
+        decimal? minPrice = null, decimal? maxPrice = null)
+    {
+        var pagedResult = await _apartmentRepository.GetAvailableApartmentsAsync(range, pageNumber, pageSize, minPrice,  maxPrice);
+
+        return new PagedResponse<ApartmentDto>
+        {
+            Items = pagedResult.Items.Select(a => a.Adapt<ApartmentDto>()).ToList(),
+            TotalCount = pagedResult.TotalCount,
+            PageSize = pageSize,
+            CurrentPage = pageNumber
         };
     }
 }
